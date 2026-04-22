@@ -8,30 +8,29 @@
         :root { --primary-color: #007bff; --bg-color: #f0f2f5; }
         body { font-family: 'Apple SD Gothic Neo', sans-serif; background-color: var(--bg-color); display: flex; margin: 0; min-height: 100vh; }
         
-        /* 우상단 워터마크 */
         .watermark { position: fixed; top: 15px; right: 15px; background: #ff0000; color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-decoration: none; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        /* 좌측 트리 목차 */
-        #sidebar { width: 280px; background: #343a40; color: #fff; padding: 20px; overflow-y: auto; height: 100vh; position: sticky; top: 0; flex-shrink: 0; }
+        #sidebar { width: 280px; background: #343a40; color: #fff; padding: 20px; overflow-y: auto; height: 100vh; position: sticky; top: 0; flex-shrink: 0; text-align: left; }
         #sidebar h2 { font-size: 1.1rem; border-bottom: 1px solid #555; padding-bottom: 10px; margin-bottom: 15px; color: #ffc107; }
-        .tree-root { list-style: none; padding: 0; font-size: 0.9rem; }
+        .tree-root { list-style: none; padding: 0; font-size: 0.85rem; }
         .tree-item { margin: 8px 0; }
         .tree-link { color: #ccc; text-decoration: none; cursor: pointer; transition: 0.2s; display: block; padding: 3px 0; }
         .tree-link:hover { color: #fff; transform: translateX(5px); }
         .tree-sub { list-style: none; padding-left: 15px; margin: 5px 0; border-left: 1px solid #555; }
 
-        /* 메인 컨텐츠 영역 */
         #main-container { flex-grow: 1; display: flex; justify-content: center; padding: 40px 20px; }
         #app { background: white; width: 100%; max-width: 550px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 25px; align-self: flex-start; text-align: center; }
         
         h1 { color: #333; font-size: 1.4rem; margin-bottom: 20px; }
         .btn-container { display: flex; flex-direction: column; gap: 10px; }
-        button { padding: 14px; border: none; border-radius: 8px; background: var(--primary-color); color: white; font-size: 1rem; cursor: pointer; font-weight: bold; }
+        button { padding: 14px; border: none; border-radius: 8px; background: var(--primary-color); color: white; font-size: 1rem; cursor: pointer; font-weight: bold; width: 100%; }
         button:hover { background: #0056b3; }
         
         .result { background: #e9ecef; padding: 20px; border-radius: 10px; line-height: 1.6; text-align: left; font-size: 0.95rem; }
         .result h3 { margin-top: 0; color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 5px; }
-        .result h4 { color: #0056b3; margin-top: 15px; }
+        .result h4 { color: #0056b3; margin-top: 15px; margin-bottom: 8px; }
+        .result ul { padding-left: 20px; margin-bottom: 15px; }
+        .result li { margin-bottom: 8px; }
         .tip-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px; margin-top: 15px; font-size: 0.85rem; }
         .video-box { margin: 15px 0; border-radius: 8px; overflow: hidden; background: #000; }
 
@@ -40,12 +39,10 @@
         .back-btn { background: #6c757d; }
         .home-btn { background: #dc3545; }
 
-        /* 모바일 대응 */
         @media (max-width: 768px) {
             body { flex-direction: column; }
-            #sidebar { width: 100%; height: auto; position: relative; padding: 15px; box-sizing: border-box; }
+            #sidebar { width: 100%; height: auto; position: relative; padding: 15px; }
             #main-container { padding: 20px 10px; }
-            .watermark { top: auto; bottom: 15px; right: 15px; }
         }
     </style>
 </head>
@@ -55,8 +52,7 @@
 
 <nav id="sidebar">
     <h2>목차 바로가기</h2>
-    <ul class="tree-root" id="tree-menu">
-        </ul>
+    <ul class="tree-root" id="tree-menu"></ul>
 </nav>
 
 <main id="main-container">
@@ -71,7 +67,31 @@
 </main>
 
 <script>
-    const level98Guide = `<h3>[1~98레벨] 육성 루트</h3><h4>■ 영웅의길 (솔플)</h4><ul><li>5~25: 쥐/뱀/사슴굴</li><li>25~50: 돼지/자호굴</li><li>50~90: 인형/문어/해마굴</li><li>90~99: 숲지대/흉가</li></ul><div class='tip-box'>영웅의길로 레벨별 무기와 90렙 경쿠 획득 가능.</div>`;
+    const level98Guide = `
+        <h3>[1~98레벨] 육성 루트</h3>
+        <h4>■ 영웅의길 (솔플)</h4>
+        <ul><li>5~25: 쥐/뱀/사슴굴</li><li>25~50: 돼지/자호굴</li><li>50~90: 인형/문어/해마굴</li><li>90~99: 숲지대/흉가</li></ul>
+        <div class='tip-box'>영웅의길로 레벨별 무기와 90렙 경쿠 획득 가능.</div>
+        <h4>■ 중독쩔/진선쩔</h4>
+        <ul><li>5~50: 쥐/뱀/강속</li><li>50~83: 인형/문어/해마굴</li><li>83~99: 1차밀격+4차도사 선녀쩔</li></ul>
+    `;
+
+    const itemGaseongbi = `
+        <h3>[가성비 방어구/무기]</h3>
+        <h4>■ 레벨 99 이하</h4>
+        <ul><li>투구: 금장/주홍투구</li><li>방어구: 50렙/86렙 갑옷</li><li>반지: 인어/진주반지</li></ul>
+        <hr>
+        <h4>■ 직업별 무기</h4>
+        <ul><li>전사: 다문창/녹호박별검</li><li>도적: 이가닌자/녹호박별도</li><li>술사/도사: 인어지팡이/녹호박별곤(봉)</li></ul>
+    `;
+
+    const itemPremium = `
+        <h3>[프리미엄 방어구/무기]</h3>
+        <ul><li>투구: 황금투구/세시투구</li><li>방어구: 해골갑옷(술사/도사 추천)</li><li>보조: 보무의목걸이/투명구두</li></ul>
+        <hr>
+        <h4>■ 초고자본</h4>
+        <ul><li>전사: 용마제삼검/진일신검</li><li>주술사: 용랑제삼봉(헬딜-10%)</li></ul>
+    `;
 
     const guideData = {
         title: "아카닉 옛날바람 가이드",
@@ -81,37 +101,37 @@
                 next: {
                     title: "직업을 선택하세요",
                     options: [
-                        { text: "주술사", next: { title: "주술사 승급별", options: [
-                            { text: "1~98레벨", result: level98Guide },
-                            { text: "99레벨(지존)", result: "<h3>[99 지존] 주술사</h3><ul><li>마력 3만~: 흉가/숲지대</li></ul>" },
-                            { text: "1차(술사)", result: "<h3>[1차 술사]</h3><ul><li>마력 6만~: 신극지방</li></ul>" },
-                            { text: "2차(현사)", result: "<h3>[2차 현사]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/YAyILbR7gXw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>마력 25만~: 중산적</li><li>마력 39만~: 높산적</li></ul>" },
-                            { text: "3차(현인)", result: "<h3>[3차 현인]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>마력 54만~: 선비족 격도술</li></ul>" },
-                            { text: "4차(현자)", result: "<h3>[4차 현자]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>마력 90만~: 낮 흉노</li></ul>" }
+                        { text: "1) 주술사", next: { title: "주술사 승급 기준", options: [
+                            { text: "1~98레벨(육성)", result: level98Guide },
+                            { text: "99레벨(지존)", result: "<h3>[99 지존] 주술사</h3><ul><li>마력 3만~: 흉가 / 숲지대 (시간당 6~8억)</li></ul>" },
+                            { text: "1차(술사)", result: "<h3>[1차 술사]</h3><ul><li>마력 6만~: 신극지방 (9~12억)</li></ul>" },
+                            { text: "2차(현사)", result: "<h3>[2차 현사]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/YAyILbR7gXw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>마력 25만~: 중산적(18~24억)</li><li>마력 39만~: 높산적(30~36억)</li></ul>" },
+                            { text: "3차(현인)", result: "<h3>[3차 현인]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>마력 54만~: 선비족 격도술(60~65억)</li></ul>" },
+                            { text: "4차(현자)", result: "<h3>[4차 현자]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>마력 90만~: 낮 흉노(160~220억)</li></ul>" }
                         ]}},
-                        { text: "전사", next: { title: "전사 승급별", options: [
-                            { text: "1~98레벨", result: level98Guide },
-                            { text: "99레벨(지존)", result: "<h3>[99 지존] 전사</h3><ul><li>체력 3만~: 흉가</li></ul>" },
-                            { text: "1차(검객)", result: "<h3>[1차 검객]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>체력 8만~: 닌자/선녀</li></ul>" },
-                            { text: "2차(검제)", result: "<h3>[2차 검제]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/E382Ctv87Xw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>체력 55만~: 800층</li></ul>" },
-                            { text: "3차(검황)", result: "<h3>[3차 검황]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div>" },
-                            { text: "4차(검성)", result: "<h3>[4차 검성]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div>" }
+                        { text: "2) 전사", next: { title: "전사 승급 기준", options: [
+                            { text: "1~98레벨(육성)", result: level98Guide },
+                            { text: "99레벨(지존)", result: "<h3>[99 지존] 전사</h3><ul><li>체력 3만~: 흉가 (10~15억)</li></ul>" },
+                            { text: "1차(검객)", result: "<h3>[1차 검객]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>체력 8만~: 닌자/선녀 (22~30억)</li></ul>" },
+                            { text: "2차(검제)", result: "<h3>[2차 검제]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/E382Ctv87Xw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>체력 55만~: 800층 (45~55억)</li></ul>" },
+                            { text: "3차(검황)", result: "<h3>[3차 검황]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>체력 100만~: 선비족</li></ul>" },
+                            { text: "4차(검성)", result: "<h3>[4차 검성]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>체력 140만~: 낮 흉노</li></ul>" }
                         ]}},
-                        { text: "도적", next: { title: "도적 승급별", options: [
-                            { text: "1~98레벨", result: level98Guide },
-                            { text: "99레벨(지존)", result: "<h3>[99 지존] 도적</h3>" },
+                        { text: "3) 도적", next: { title: "도적 승급 기준", options: [
+                            { text: "1~98레벨(육성)", result: level98Guide },
+                            { text: "99레벨(지존)", result: "<h3>[99 지존] 도적</h3><ul><li>체력 3만~: 흉가</li></ul>" },
                             { text: "1차(자객)", result: "<h3>[1차 자객]</h3>" },
                             { text: "2차(진객)", result: "<h3>[2차 진객]</h3>" },
                             { text: "3차(귀검)", result: "<h3>[3차 귀검]</h3>" },
                             { text: "4차(태성)", result: "<h3>[4차 태성]</h3>" }
                         ]}},
-                        { text: "도사", next: { title: "도사 승급별", options: [
-                            { text: "1~98레벨", result: level98Guide },
-                            { text: "99레벨(지존)", result: "<h3>[99 지존] 도사</h3><ul><li>경험치: 9~12억</li></ul>" },
+                        { text: "4) 도사", next: { title: "도사 승급 기준", options: [
+                            { text: "1~98레벨(육성)", result: level98Guide },
+                            { text: "99레벨(지존)", result: "<h3>[99 지존] 도사</h3><ul><li>흉가: 9~12억</li></ul>" },
                             { text: "1차(도인)", result: "<h3>[1차 도인]</h3><ul><li>닌자의방: 21억</li></ul>" },
-                            { text: "2차(명인)", result: "<h3>[2차 명인]</h3><ul><li>도삭산 900층: 45~55억</li></ul>" },
-                            { text: "3차(진인)", result: "<h3>[3차 진인]</h3><ul><li>선비족 격도술: 60억</li></ul>" },
-                            { text: "4차(진선)", result: "<h3>[4차 진선]</h3><ul><li>낮 흉노 격도술: 160억~</li></ul>" }
+                            { text: "2차(명인)", result: "<h3>[2차 명인]</h3><ul><li>도삭산 900층: 45~55억</li><li>선비반반: 80~100억</li></ul>" },
+                            { text: "3차(진인)", result: "<h3>[3차 진인]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>격도술: 60억</li></ul>" },
+                            { text: "4차(진선)", result: "<h3>[4차 진선]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>낮 흉노: 160~230억</li></ul>" }
                         ]}}
                     ]
                 }
@@ -121,8 +141,8 @@
                 next: {
                     title: "아이템 세팅",
                     options: [
-                        { text: "가성비 세팅", result: "<h3>[가성비 세팅]</h3><p>전사: 현철중검, 다문창 등</p>" },
-                        { text: "프리미엄 세팅", result: "<h3>[프리미엄 세팅]</h3><p>심판의낫, 천풍선 등</p>" }
+                        { text: "가성비 세팅", result: itemGaseongbi },
+                        { text: "프리미엄 세팅", result: itemPremium }
                     ]
                 }
             }
@@ -132,22 +152,20 @@
     let historyStack = [];
     const treeMenuEl = document.getElementById('tree-menu');
 
-    // 트리 목차 생성 함수
-    function buildTree(node, container, prefix = "") {
+    function buildTree(node, container) {
         if (node.options) {
             node.options.forEach(opt => {
                 const li = document.createElement('li');
                 li.className = "tree-item";
                 const a = document.createElement('a');
                 a.className = "tree-link";
-                a.innerText = prefix + opt.text;
+                a.innerText = opt.text;
                 a.onclick = () => { historyStack = [guideData]; render(opt.next || opt); };
                 li.appendChild(a);
-
                 if (opt.next && opt.next.options) {
                     const subUl = document.createElement('ul');
                     subUl.className = "tree-sub";
-                    buildTree(opt.next, subUl, "");
+                    buildTree(opt.next, subUl);
                     li.appendChild(subUl);
                 }
                 container.appendChild(li);
@@ -179,7 +197,6 @@
     function goBack() { if (historyStack.length > 1) { historyStack.pop(); render(historyStack.pop()); } }
     function goHome() { historyStack = []; render(guideData); }
 
-    // 초기화
     buildTree(guideData, treeMenuEl);
     render(guideData);
 </script>

@@ -138,14 +138,28 @@
                                 options: [
                                     { text: "1) 1~98레벨 (육성)", result: level98Guide },
                                     { text: "2) 99레벨 (지존)", result: "<h3>[99레벨 도적] 사냥터</h3><ul><li><strong>체력 3만~:</strong> 흉가 (시간당 10~15억)</li></ul><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 선녀 쩔: 시간당 30억<br>※ 무사/산적 쩔: 시간당 45~55억</div>" },
-                                    { text: "3) 1차 (자객)", result: "<h3>[1차 자객] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 8만~:</strong> 닌자 / 선녀 (시간당 22~30억)</li><li><strong>체력 30만:</strong> 무사의방 밀격 (시간당 45~55억)</li></ul>" },
-                                    { text: "4) 2차 (진검)", result: "<h3>[2차 진검] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/E382Ctv87Xw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 30~55만:</strong> 선녀 + 닌자 2굴 (시간당 30~32억)</li><li><strong>체력 55~80만:</strong> 도삭산 800층 (시간당 45~55억)</li><li><strong>체력 80~100만:</strong> 선비족 (격도술: 60억 / 밀격: 80~90억)</li></ul><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 2차 선비 쩔(밀대): 시간당 80~90억</div>" },
+                                    { text: "3) 1차 (자객)", result: "<h3>[1차 자객] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 8만~:</strong> 닌자 / 선녀 (시간당 22~30억)</li><li><strong>체력 25~30만:</strong> 높산적 밀격 (시간당 45~55억)</li></ul>" },
+                                    { text: "4) 2차 (진객)", result: "<h3>[2차 진객] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/E382Ctv87Xw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 30~55만:</strong> 선녀 + 닌자 2굴 (시간당 30~32억)</li><li><strong>체력 55~80만:</strong> 도삭산 800층 (시간당 45~55억)</li><li><strong>체력 80~100만:</strong> 선비족 (격도술: 60억 / 밀격: 80~90억)</li></ul><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 2차 선비 쩔(밀대): 시간당 80~90억</div>" },
                                     { text: "5) 3차 (귀검)", result: "<h3>[3차 귀검] 사냥터 (선비족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 100~140만:</strong> 선비족 (격도술: 65억 / 반반: 90~100억)</li></ul><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 3차 선비 밀대: 시간당 90~100억</div>" },
                                     { text: "6) 4차 (태성)", result: "<h3>[4차 태성] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 140~220만:</strong> 낮 흉노 (격도술: 160~220억 / 격도: 150~220억)</li><li><strong>체력 240만~:</strong> 도삭산 900층 (격도술: 300~350억)</li></ul><div class='tip-box'><strong>💡 참고:</strong><br>※ 격도: 82.5% (75% x 1.1)<br>※ 격도술: 60% (50% x 1.1 x 1.1)</div>" }
                                 ]
                             }
                         },
-                        { text: "4) 도사", result: "도사 가이드는 준비 중입니다." }
+                        // =============== [도사 파트 추가] ===============
+                        { 
+                            text: "4) 도사", 
+                            next: {
+                                title: "도사 승급 기준을 선택하세요",
+                                options: [
+                                    { text: "1) 1~98레벨 (육성)", result: level98Guide },
+                                    { text: "2) 99레벨 (지존)", result: "<h3>[99레벨 도사] 사냥터</h3><ul><li><strong>흉가:</strong> 시간당 9~12억</li></ul>" },
+                                    { text: "3) 1차 (도인)", result: "<h3>[1차 도인] 사냥터</h3><ul><li><strong>흉가:</strong> 시간당 12~15억</li><li><strong>닌자의방:</strong> 시간당 21억 내외</li></ul>" },
+                                    { text: "4) 2차 (명인)", result: "<h3>[2차 명인] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/E382Ctv87Xw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>선녀의방:</strong> 시간당 28~32억</li><li><strong>마력 30만~:</strong> 도삭산 900층 (시간당 45~55억)</li><li><strong>선비반반:</strong> 시간당 80~100억 (금전 약 30만전 소모)</li></ul>" },
+                                    { text: "5) 3차 (진인)", result: "<h3>[3차 진인] 사냥터 (선비족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>선비족 격도술:</strong> 약 60억 (마력 낮을 때 추천)</li><li><strong>선비족 격도:</strong> 약 80억</li></ul>" },
+                                    { text: "6) 4차 (진선)", result: "<h3>[4차 진선] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>낮 흉노 격도술:</strong> 160억(마력 90만) ~ 230억(마력 110만)</li><li><strong>마력 140만~:</strong> 도삭산 900층 격도술 (시간당 320~350억)</li></ul>" }
+                                ]
+                            }
+                        }
                     ]
                 }
             },
@@ -160,26 +174,26 @@
                                 <h3>[가성비 방어구 세팅]</h3>
                                 <h4>■ 레벨 99 이하</h4>
                                 <ul>
-                                    <li><strong>투구:</strong> 금장남자(여)투구 (무장 -10, 내구 3만, 재생 20) <br>/ 주홍투구 (무장 -9, 체마 500, 힘 3, 민지재 2, 마방 1, 수리O)</li>
-                                    <li><strong>방어구:</strong> 50렙 회색갑옷 (무장 -33, 내구 9만) <br>/ 86렙 갑옷 (무장 -32~-46, 내구 500만, 수리X)</li>
-                                    <li><strong>반지류:</strong> 인어반지 (무장 -7, 체 200, 마 250, 힘민지 1) <br>/ 진주반지 (무장 -7, Hit 3, Dam 3, 체마 200, 지 1, 재생 1, 마방 1, 수리X)</li>
+                                    <li><strong>투구:</strong> 금장남자(여)투구 (무장 -10, 내구 3만, 재생 20) / 주홍투구 (무장 -9, 체마 500, 힘 3, 민지재 2, 마방 1, 수리O)</li>
+                                    <li><strong>방어구:</strong> 50렙 갑옷 (무장 -33, 내구 9만) / 86렙 갑옷 (무장 -32~-46, 내구 500만, 수리X)</li>
+                                    <li><strong>반지류:</strong> 인어반지 (무장 -7, 체 200, 마 250, 힘민지 1) / 진주반지 (무장 -7, Hit 3, Dam 3, 체마 200, 지 1, 재생 1, 마방 1, 수리X)</li>
                                     <li><strong>보조:</strong> 상해 (무장 -2) / 직업별 목걸이 (체 200 또는 마 100)</li>
                                 </ul>
                                 <h4>■ 4차 승급</h4>
                                 <ul>
                                     <li><strong>투구:</strong> 용왕의투구 (무장 -11, Hit 4, Dam 4, 체마 900, 힘 6, 민 5, 지 4, 마방 1, 재생 2, 수리O)</li>
-                                    <li><strong>방어구:</strong> 3차 승급옷 (무장 -36~-49, 내구 100만, 수리O) <br>/ 800층 산신옷 (무장 -40~-45, 체 600, 마 300, 수리O)</li>
-                                    <li><strong>반지류:</strong> 75렙 녹호박 반지류 (무장 -6~-9, 체 200~400, 마 0~250, 마방 1, 재생 2, 수리X) <br>/ 용왕의반지 (무장 -9, 체마 600, 힘민 1, 지 5, 마방 1, 수리O)</li>
+                                    <li><strong>방어구:</strong> 3차 승급옷 (무장 -36~-49, 내구 100만, 수리O) / 800층 산신옷 (무장 -40~-45, 체 600, 마 300, 수리O)</li>
+                                    <li><strong>반지류:</strong> 75렙 녹호박 반지류 (무장 -6~-9, 체 200~400, 마 0~250, 마방 1, 재생 2, 수리X) / 용왕의반지 (무장 -9, 체마 600, 힘민 1, 지 5, 마방 1, 수리O)</li>
                                     <li><strong>보조:</strong> 시력회복의귀걸이 (흉노 사냥시 필수, 수리X)</li>
                                 </ul>
                                 <hr>
                                 <h3>[가성비 무기 세팅]</h3>
                                 <div class="tip-box"><strong>💡 아카닉 팁:</strong><br>주술사와 도사는 무기 의존도가 매우 적어 생략 가능합니다.</div>
                                 <ul>
-                                    <li><strong>전사:</strong> 비철단도 → <br>현철중검 (대지의힘) → <br>다문창 (Dam 2, 힘민지 5) → <br>녹호박별검 (Hit 6, Dam 1, 체 4000, 마 500, 힘 1) → <br>검성기검 (체 2만, 힘민지 10, 사성격)</li>
-                                    <li><strong>도적:</strong> 비철단도 → <br>일월대도/도깨비방망이 → <br>이가닌자의검 (Hit 5, Dam 4) → <br>녹호박별도 (Hit 6, Dam 1, 체 4000, 마 500, 힘 1) → <br>태성태도 (체 2만, 힘민지 10, 사성격)</li>
-                                    <li><strong>주술사:</strong> 비철단도 → <br>칠교칠선/인풍죽선 →<br> 인어장군지팡이 (체마 400, 힘민지 5) → <br>녹호박별곤 (무장 -1, 체 300, 마 2000, 지 2, 마방 2) → <br>현자금봉 (마 1만, 힘민지 10, 사성격)</li>
-                                    <li><strong>도사:</strong> 비철단도 → <br>칠교/인풍 → <br>인어장군지팡이 → <br>녹호박별봉 (무장 -1, 체 300, 마 2000, 힘민지 10, 마방 2) → <br>진선역봉 (마 1만, 힘민지 10, 사성격)</li>
+                                    <li><strong>전사:</strong> 비철단도 → 현철중검 (대지의힘) → 다문창 (Dam 2, 힘민지 5) → 녹호박별검 (Hit 6, Dam 1, 체 4000, 마 500, 힘 1) → 검성기검 (체 2만, 힘민지 10, 사성격)</li>
+                                    <li><strong>도적:</strong> 비철단도 → 일월대도/도깨비방망이 → 이가닌자의검 (Hit 5, Dam 4) → 녹호박별도 (Hit 6, Dam 1, 체 4000, 마 500, 힘 1) → 태성태도 (체 2만, 힘민지 10, 사성격)</li>
+                                    <li><strong>주술사:</strong> 비철단도 → 칠교칠선/인풍죽선 → 인어장군지팡이 (체마 400, 힘민지 5) → 녹호박별곤 (무장 -1, 체 300, 마 2000, 지 2, 마방 2) → 현자금봉 (마 1만, 힘민지 10, 사성격)</li>
+                                    <li><strong>도사:</strong> 비철단도 → 칠교/인풍 → 인어장군지팡이 → 녹호박별봉 (무장 -1, 체 300, 마 2000, 힘민지 10, 마방 2) → 진선역봉 (마 1만, 힘민지 10, 사성격)</li>
                                 </ul>
                             `
                         },
@@ -189,11 +203,11 @@
                                 <h3>[프리미엄 방어구 세팅]</h3>
                                 <ul>
                                     <li><strong>투구:</strong> 황금투구 (무장 -12, 체마 800, 힘민지 5, 마방 1, 재생 2, 수리O) / 세시투구 (무장 -7, 체마 100, 내구도보호 50%)</li>
-                                    <li><strong>투구(대체재):</strong> '미구현'연홍/연청투구 (무장 -8, Hit 3, Dam 2, 체마 1000, 힘 4, 민 3, 내구도보호 70%)</li>
+                                    <li><strong>투구(대체재):</strong> 연홍/연청투구 (무장 -8, Hit 3, Dam 2, 체마 1000, 힘 4, 민 3, 내구도보호 70%)</li>
                                     <li><strong>방어구:</strong> 해골갑옷 (무장 -45, 체 -500, 마 300, 수리O ※ 술사/도사 추천)</li>
-                                    <li><strong>반지류:</strong> 황금 장갑/팔찌/반지/선류 (무장 -10, 체/마 300~800) <br>/ 연위팔찌 (무장 -10, Hit 2, Dam 2, 체 500, 마 200, 힘 1, 민 3, 재생 2, 마방 1)</li>
+                                    <li><strong>반지류:</strong> 황금 장갑/팔찌/반지/선류 (무장 -10, 체/마 300~800) / 연위팔찌 (무장 -10, Hit 2, Dam 2, 체 500, 마 200, 힘 1, 민 3, 재생 2, 마방 1)</li>
                                     <li><strong>반지(대체재):</strong> 적호박팔찌 (무장 -10, Hit 2, Dam 3, 체 200, 마 100, 마방 1, 재생 2, 수리X)</li>
-                                    <li><strong>보조:</strong> 보무의목걸이 (자동 보무) <br>/ 투명구두 (자동 투명)<br> / 금편의목걸이 (무장 -2, Hit 1, Dam 1, 체마 500, 힘민지 3)</li>
+                                    <li><strong>보조:</strong> 보무의목걸이 (자동 보무) / 투명구두 (자동 투명) / 금편의목걸이 (무장 -2, Hit 1, Dam 1, 체마 500, 힘민지 3)</li>
                                 </ul>
                                 <hr>
                                 <h3>[프리미엄 무기 세팅 (성능)]</h3>

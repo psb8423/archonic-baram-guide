@@ -8,8 +8,11 @@
         :root { --primary-color: #007bff; --bg-color: #f0f2f5; }
         body { font-family: 'Apple SD Gothic Neo', sans-serif; background-color: var(--bg-color); display: flex; margin: 0; min-height: 100vh; }
         
-        .watermark { position: fixed; top: 15px; right: 15px; background: #ff0000; color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-decoration: none; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        /* 1시 방향 워터마크 (유튜브 링크) */
+        .watermark { position: fixed; top: 15px; right: 15px; background: #ff0000; color: white; padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-decoration: none; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.3s; }
+        .watermark:hover { background: #cc0000; }
 
+        /* 좌측 트리 목차 */
         #sidebar { width: 280px; background: #343a40; color: #fff; padding: 20px; overflow-y: auto; height: 100vh; position: sticky; top: 0; flex-shrink: 0; text-align: left; }
         #sidebar h2 { font-size: 1.1rem; border-bottom: 1px solid #555; padding-bottom: 10px; margin-bottom: 15px; color: #ffc107; }
         .tree-root { list-style: none; padding: 0; font-size: 0.85rem; }
@@ -18,37 +21,44 @@
         .tree-link:hover { color: #fff; transform: translateX(5px); }
         .tree-sub { list-style: none; padding-left: 15px; margin: 5px 0; border-left: 1px solid #555; }
 
+        /* 메인 컨텐츠 영역 */
         #main-container { flex-grow: 1; display: flex; justify-content: center; padding: 40px 20px; }
         #app { background: white; width: 100%; max-width: 550px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 25px; align-self: flex-start; text-align: center; }
         
-        h1 { color: #333; font-size: 1.4rem; margin-bottom: 20px; }
+        h1 { color: #333; font-size: 1.4rem; margin-bottom: 20px; word-break: keep-all; }
         .btn-container { display: flex; flex-direction: column; gap: 10px; }
-        button { padding: 14px; border: none; border-radius: 8px; background: var(--primary-color); color: white; font-size: 1rem; cursor: pointer; font-weight: bold; width: 100%; }
+        button { padding: 14px; border: none; border-radius: 8px; background: var(--primary-color); color: white; font-size: 1rem; cursor: pointer; font-weight: bold; width: 100%; box-sizing: border-box; }
         button:hover { background: #0056b3; }
         
         .result { background: #e9ecef; padding: 20px; border-radius: 10px; line-height: 1.6; text-align: left; font-size: 0.95rem; }
         .result h3 { margin-top: 0; color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 5px; }
-        .result h4 { color: #0056b3; margin-top: 15px; margin-bottom: 8px; }
+        .result h4 { color: #0056b3; margin-top: 20px; margin-bottom: 10px; }
         .result ul { padding-left: 20px; margin-bottom: 15px; }
         .result li { margin-bottom: 8px; }
-        .tip-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px; margin-top: 15px; font-size: 0.85rem; }
-        .video-box { margin: 15px 0; border-radius: 8px; overflow: hidden; background: #000; }
+        .result hr { border: 0; height: 1px; background: #ccc; margin: 25px 0; }
+        
+        .tip-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px; margin-top: 15px; font-size: 0.9rem; }
+        .video-box { margin-top: 15px; margin-bottom: 15px; border-radius: 10px; overflow: hidden; }
 
         .nav-btns { display: flex; gap: 10px; margin-top: 20px; }
-        .nav-btn { flex: 1; padding: 10px; border-radius: 8px; color: white; cursor: pointer; border: none; font-weight: bold; }
+        .nav-btn { flex: 1; padding: 12px; border-radius: 10px; color: white; cursor: pointer; border: none; font-weight: bold; font-size: 1rem; transition: 0.2s; }
         .back-btn { background: #6c757d; }
+        .back-btn:hover { background: #5a6268; }
         .home-btn { background: #dc3545; }
+        .home-btn:hover { background: #c82333; }
 
+        /* 모바일 대응 */
         @media (max-width: 768px) {
             body { flex-direction: column; }
-            #sidebar { width: 100%; height: auto; position: relative; padding: 15px; }
+            #sidebar { width: 100%; height: auto; position: relative; padding: 15px; box-sizing: border-box; }
             #main-container { padding: 20px 10px; }
+            .watermark { top: auto; bottom: 15px; right: 15px; }
         }
     </style>
 </head>
 <body>
 
-<a href="https://www.youtube.com/@archonic00" target="_blank" class="watermark">📺 아카닉 유튜브</a>
+<a href="https://www.youtube.com/@archonic00" target="_blank" class="watermark">📺 아카닉 유튜브 제작</a>
 
 <nav id="sidebar">
     <h2>목차 바로가기</h2>
@@ -68,29 +78,31 @@
 
 <script>
     const level98Guide = `
-        <h3>[1~98레벨] 육성 루트</h3>
+        <h3>[1~98레벨] 사냥터 루트</h3>
         <h4>■ 영웅의길 (솔플)</h4>
-        <ul><li>5~25: 쥐/뱀/사슴굴</li><li>25~50: 돼지/자호굴</li><li>50~90: 인형/문어/해마굴</li><li>90~99: 숲지대/흉가</li></ul>
-        <div class='tip-box'>영웅의길로 레벨별 무기와 90렙 경쿠 획득 가능.</div>
-        <h4>■ 중독쩔/진선쩔</h4>
-        <ul><li>5~50: 쥐/뱀/강속</li><li>50~83: 인형/문어/해마굴</li><li>83~99: 1차밀격+4차도사 선녀쩔</li></ul>
-    `;
-
-    const itemGaseongbi = `
-        <h3>[가성비 방어구/무기]</h3>
-        <h4>■ 레벨 99 이하</h4>
-        <ul><li>투구: 금장/주홍투구</li><li>방어구: 50렙/86렙 갑옷</li><li>반지: 인어/진주반지</li></ul>
-        <hr>
-        <h4>■ 직업별 무기</h4>
-        <ul><li>전사: 다문창/녹호박별검</li><li>도적: 이가닌자/녹호박별도</li><li>술사/도사: 인어지팡이/녹호박별곤(봉)</li></ul>
-    `;
-
-    const itemPremium = `
-        <h3>[프리미엄 방어구/무기]</h3>
-        <ul><li>투구: 황금투구/세시투구</li><li>방어구: 해골갑옷(술사/도사 추천)</li><li>보조: 보무의목걸이/투명구두</li></ul>
-        <hr>
-        <h4>■ 초고자본</h4>
-        <ul><li>전사: 용마제삼검/진일신검</li><li>주술사: 용랑제삼봉(헬딜-10%)</li></ul>
+        <ul>
+            <li><strong>5~25:</strong> 쥐굴, 뱀굴, 사슴굴</li>
+            <li><strong>25~50:</strong> 돼지굴(자본필요시) / 고양이굴, 자호굴(30~)</li>
+            <li><strong>50~90:</strong> 인형굴(50~), 문어굴(60~), 해마굴/숲지대(70~)</li>
+            <li><strong>90~99:</strong> 숲지대, 흉가</li>
+        </ul>
+        <div class='tip-box'>※ 계정당 한번만 이용가능, 영웅의길로 레벨별 무기와 90렙 경험치 쿠폰 획득.</div>
+        <h4>■ 중독쩔 (또는 진선)</h4>
+        <ul>
+            <li><strong>5~30:</strong> 쥐굴, 뱀굴, 사슴굴</li>
+            <li><strong>30~50:</strong> 장안성 강속</li>
+            <li><strong>50~83:</strong> 인형굴(50~), 문어굴(60~), 해마굴(70~)</li>
+            <li><strong>83~99:</strong> 밀격(1차) + 밀대도사(4차) 선녀쩔 (1시간 정도)</li>
+        </ul>
+        <div class='tip-box'>※ 문파원/친구가 도와줄 때. 천리마굴도 괜찮으나 거리가 멂. 돼지굴은 51렙 이상 입장불가.</div>
+        <h4>■ 무자본 일반</h4>
+        <ul>
+            <li><strong>5~25:</strong> 초보자사냥터(~10), 쥐/뱀굴(~20), 사슴굴(~25)</li>
+            <li><strong>25~60:</strong> 돼지굴(자본마련), 자호굴(51~)</li>
+            <li><strong>60~90:</strong> 인형굴/해안가(~70), 문어/해마굴(~90)</li>
+            <li><strong>90~99:</strong> 흉가 (흉가노노 등)</li>
+        </ul>
+        <div class='tip-box'>※ 영웅의길 X, 도와주는 사람 X 가정의 루트.</div>
     `;
 
     const guideData = {
@@ -101,48 +113,133 @@
                 next: {
                     title: "직업을 선택하세요",
                     options: [
-                        { text: "1) 주술사", next: { title: "주술사 승급 기준", options: [
-                            { text: "1~98레벨(육성)", result: level98Guide },
-                            { text: "99레벨(지존)", result: "<h3>[99 지존] 주술사</h3><ul><li>마력 3만~: 흉가 / 숲지대 (시간당 6~8억)</li></ul>" },
-                            { text: "1차(술사)", result: "<h3>[1차 술사]</h3><ul><li>마력 6만~: 신극지방 (9~12억)</li></ul>" },
-                            { text: "2차(현사)", result: "<h3>[2차 현사]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/YAyILbR7gXw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>마력 25만~: 중산적(18~24억)</li><li>마력 39만~: 높산적(30~36억)</li></ul>" },
-                            { text: "3차(현인)", result: "<h3>[3차 현인]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>마력 54만~: 선비족 격도술(60~65억)</li></ul>" },
-                            { text: "4차(현자)", result: "<h3>[4차 현자]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>마력 90만~: 낮 흉노(160~220억)</li></ul>" }
-                        ]}},
-                        { text: "2) 전사", next: { title: "전사 승급 기준", options: [
-                            { text: "1~98레벨(육성)", result: level98Guide },
-                            { text: "99레벨(지존)", result: "<h3>[99 지존] 전사</h3><ul><li>체력 3만~: 흉가 (10~15억)</li></ul>" },
-                            { text: "1차(검객)", result: "<h3>[1차 검객]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>체력 8만~: 닌자/선녀 (22~30억)</li></ul>" },
-                            { text: "2차(검제)", result: "<h3>[2차 검제]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/E382Ctv87Xw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>체력 55만~: 800층 (45~55억)</li></ul>" },
-                            { text: "3차(검황)", result: "<h3>[3차 검황]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>체력 100만~: 선비족</li></ul>" },
-                            { text: "4차(검성)", result: "<h3>[4차 검성]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>체력 140만~: 낮 흉노</li></ul>" }
-                        ]}},
-                        { text: "3) 도적", next: { title: "도적 승급 기준", options: [
-                            { text: "1~98레벨(육성)", result: level98Guide },
-                            { text: "99레벨(지존)", result: "<h3>[99 지존] 도적</h3><ul><li>체력 3만~: 흉가</li></ul>" },
-                            { text: "1차(자객)", result: "<h3>[1차 자객]</h3>" },
-                            { text: "2차(진객)", result: "<h3>[2차 진객]</h3>" },
-                            { text: "3차(귀검)", result: "<h3>[3차 귀검]</h3>" },
-                            { text: "4차(태성)", result: "<h3>[4차 태성]</h3>" }
-                        ]}},
-                        { text: "4) 도사", next: { title: "도사 승급 기준", options: [
-                            { text: "1~98레벨(육성)", result: level98Guide },
-                            { text: "99레벨(지존)", result: "<h3>[99 지존] 도사</h3><ul><li>흉가: 9~12억</li></ul>" },
-                            { text: "1차(도인)", result: "<h3>[1차 도인]</h3><ul><li>닌자의방: 21억</li></ul>" },
-                            { text: "2차(명인)", result: "<h3>[2차 명인]</h3><ul><li>도삭산 900층: 45~55억</li><li>선비반반: 80~100억</li></ul>" },
-                            { text: "3차(진인)", result: "<h3>[3차 진인]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>격도술: 60억</li></ul>" },
-                            { text: "4차(진선)", result: "<h3>[4차 진선]</h3><div class='video-box'><iframe width='100%' height='230' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li>낮 흉노: 160~230억</li></ul>" }
-                        ]}}
+                        { 
+                            text: "1) 주술사", 
+                            next: {
+                                title: "주술사 승급 기준을 선택하세요",
+                                options: [
+                                    { text: "1) 1~98레벨 (육성)", result: level98Guide },
+                                    { text: "2) 99레벨 (지존)", result: "<h3>[99레벨 주술사] 사냥터</h3><ul><li><strong>마력 3만~:</strong> 흉가 / 숲지대 (시간당 6~8억)</li></ul><div class='tip-box'><strong>💡 아카닉 팁:</strong><br>주술사는 쩔/밀대와 직접 사냥 효율 차이가 큽니다. 경쿠가 있다면 쩔 받는 것을 추천합니다. 숲지대가 경험치가 높아도 <strong>흉가를 추천하는 이유</strong>는, 당장 번 돈을 쩔에 쓰면 경험치 상으로 훨씬 이득이기 때문입니다.</div>" },
+                                    { text: "3) 1차 (술사)", result: "<h3>[1차 술사] 사냥터</h3><ul><li><strong>마력 6만~:</strong> 신극지방 (시간당 9~12억)</li></ul><div class='tip-box'><strong>💡 아카닉 추천 루트:</strong><br>흉가 + 높산적(무사)쩔 → <strong>(1차) 신극지방 + 높산적(무사)쩔</strong><br><br>※ 선녀 쩔: 시간당 30억<br>※ 무사/산적 쩔: 시간당 45~55억</div>" },
+                                    { text: "4) 2차 (현사)", result: "<h3>[2차 현사] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/YAyILbR7gXw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>마력 25만~:</strong> 중산적 (시간당 18~24억)</li><li><strong>마력 39만~ (솔플):</strong> 높산적 (시간당 30~36억)</li><li><strong>마력 36만~(격도술) / 45만~(솔플):</strong> 도삭산 800층 (시간당 45~55억)</li></ul><div class='tip-box'><strong>💡 아카닉 추천 루트:</strong><br>(1차) 신극지방 → <strong>(2차) 800층 격도술 + 선비쩔</strong><br><br>※ 2차 선비 쩔(밀대): 시간당 80~90억</div>" },
+                                    { text: "5) 3차 (현인)", result: "<h3>[3차 현인] 사냥터 (선비족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>마력 34만 (저주+마기):</strong> 선비족 (솔플: 50~55억 / 떱헬: 65~70억)</li><li><strong>마력 54만 (격도술):</strong> 선비족 (격도술: 60~65억)</li></ul><div class='tip-box'><strong>💡 아카닉 추천 루트:</strong><br>(2차) 800층 → <strong>(3차) 선비족 격도술</strong><br><br>※ 3차 선비 밀대: 시간당 90~100억</div>" },
+                                    { text: "6) 4차 (현자)", result: "<h3>[4차 현자] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>마력 90만 (격도술):</strong> 낮 흉노 (시간당 160~220억)</li><li><strong>마력 135만~ (격도술):</strong> 도삭산 900층 (시간당 300~350억)</li></ul><div class='tip-box'><strong>💡 아카닉 추천 루트:</strong><br>(3차) 선비족 격도술 → <strong>(4차) 낮흉 격도술</strong><br><br>※ 참고: 격도 82.5%, 격도술 60%</div>" }
+                                ]
+                            }
+                        },
+                        { 
+                            text: "2) 전사", 
+                            next: {
+                                title: "전사 승급 기준을 선택하세요",
+                                options: [
+                                    { text: "1) 1~98레벨 (육성)", result: level98Guide },
+                                    { text: "2) 99레벨 (지존)", result: "<h3>[99레벨 전사] 사냥터</h3><ul><li><strong>체력 3만~:</strong> 흉가 (시간당 10~15억)</li></ul><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 선녀 쩔: 시간당 30억<br>※ 무사/산적 쩔: 시간당 45~55억</div>" },
+                                    { text: "3) 1차 (검객)", result: "<h3>[1차 검객] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 8만~:</strong> 닌자 / 선녀 (시간당 22~30억)</li><li><strong>체력 25~30만:</strong> 높산적 밀격 (시간당 45~55억)</li></ul>" },
+                                    { text: "4) 2차 (검제)", result: "<h3>[2차 검제] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/E382Ctv87Xw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 30~55만:</strong> 선녀 + 닌자 2굴 (시간당 30~32억)</li><li><strong>체력 55~80만:</strong> 도삭산 800층 (시간당 45~55억)</li><li><strong>체력 80~100만:</strong> 선비족 (격도술: 60억 / 밀격: 80~90억)</li></ul><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 2차 선비 쩔(밀대): 시간당 80~90억</div>" },
+                                    { text: "5) 3차 (검황)", result: "<h3>[3차 검황] 사냥터 (선비족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 100~140만:</strong> 선비족 (격도술: 65억 / 반반: 90~100억)</li></ul><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 3차 선비 밀대: 시간당 90~100억</div>" },
+                                    { text: "6) 4차 (검성)", result: "<h3>[4차 검성] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 140~220만:</strong> 낮 흉노 (격도술: 160~220억 / 격도: 150~220억)</li><li><strong>체력 240만~:</strong> 도삭산 900층 (격도술: 300~350억)</li></ul><div class='tip-box'><strong>💡 참고:</strong><br>※ 격도: 82.5% (75% x 1.1)<br>※ 격도술: 60% (50% x 1.1 x 1.1)</div>" }
+                                ]
+                            }
+                        },
+                        { 
+                            text: "3) 도적", 
+                            next: {
+                                title: "도적 승급 기준을 선택하세요",
+                                options: [
+                                    { text: "1) 1~98레벨 (육성)", result: level98Guide },
+                                    { text: "2) 99레벨 (지존)", result: "<h3>[99레벨 도적] 사냥터</h3><ul><li><strong>체력 3만~:</strong> 흉가 (시간당 10~15억)</li></ul><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 선녀 쩔: 시간당 30억<br>※ 무사/산적 쩔: 시간당 45~55억</div>" },
+                                    { text: "3) 1차 (자객)", result: "<h3>[1차 자객] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 8만~:</strong> 닌자 / 선녀 (시간당 22~30억)</li><li><strong>체력 25~30만:</strong> 높산적 밀격 (시간당 45~55억)</li></ul>" },
+                                    { text: "4) 2차 (진검)", result: "<h3>[2차 진검] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/E382Ctv87Xw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 30~55만:</strong> 선녀 + 닌자 2굴 (시간당 30~32억)</li><li><strong>체력 55~80만:</strong> 도삭산 800층 (시간당 45~55억)</li><li><strong>체력 80~100만:</strong> 선비족 (격도술: 60억 / 밀격: 80~90억)</li></ul><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 2차 선비 쩔(밀대): 시간당 80~90억</div>" },
+                                    { text: "5) 3차 (귀검)", result: "<h3>[3차 귀검] 사냥터 (선비족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 100~140만:</strong> 선비족 (격도술: 65억 / 반반: 90~100억)</li></ul><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 3차 선비 밀대: 시간당 90~100억</div>" },
+                                    { text: "6) 4차 (태성)", result: "<h3>[4차 태성] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 140~220만:</strong> 낮 흉노 (격도술: 160~220억 / 격도: 150~220억)</li><li><strong>체력 240만~:</strong> 도삭산 900층 (격도술: 300~350억)</li></ul><div class='tip-box'><strong>💡 참고:</strong><br>※ 격도: 82.5% (75% x 1.1)<br>※ 격도술: 60% (50% x 1.1 x 1.1)</div>" }
+                                ]
+                            }
+                        },
+                        { 
+                            text: "4) 도사", 
+                            next: {
+                                title: "도사 승급 기준을 선택하세요",
+                                options: [
+                                    { text: "1) 1~98레벨 (육성)", result: level98Guide },
+                                    { text: "2) 99레벨 (지존)", result: "<h3>[99레벨 도사] 사냥터</h3><ul><li><strong>흉가:</strong> 시간당 9~12억</li></ul>" },
+                                    { text: "3) 1차 (도인)", result: "<h3>[1차 도인] 사냥터</h3><ul><li><strong>흉가:</strong> 시간당 12~15억</li><li><strong>닌자의방:</strong> 시간당 21억 내외</li></ul>" },
+                                    { text: "4) 2차 (명인)", result: "<h3>[2차 명인] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/E382Ctv87Xw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>선녀의방:</strong> 시간당 28~32억</li><li><strong>마력 30만~:</strong> 도삭산 900층 (시간당 45~55억)</li><li><strong>선비반반:</strong> 시간당 80~100억 (금전 약 30만전 소모)</li></ul>" },
+                                    { text: "5) 3차 (진인)", result: "<h3>[3차 진인] 사냥터 (선비족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>선비족 격도술:</strong> 약 60억 (마력 낮을 때 추천)</li><li><strong>선비족 격도:</strong> 약 80억</li></ul>" },
+                                    { text: "6) 4차 (진선)", result: "<h3>[4차 진선] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>낮 흉노 격도술:</strong> 160억(마력 90만) ~ 230억(마력 110만)</li><li><strong>마력 140만~:</strong> 도삭산 900층 격도술 (시간당 320~350억)</li></ul>" }
+                                ]
+                            }
+                        }
                     ]
                 }
             },
             {
                 text: "2. 아이템",
                 next: {
-                    title: "아이템 세팅",
+                    title: "아이템 세팅 종류를 선택하세요",
                     options: [
-                        { text: "가성비 세팅", result: itemGaseongbi },
-                        { text: "프리미엄 세팅", result: itemPremium }
+                        {
+                            text: "1. 가성비 방어구/무기",
+                            result: `
+                                <h3>[가성비 방어구 세팅]</h3>
+                                <h4>■ 레벨 99 이하</h4>
+                                <ul>
+                                    <li><strong>투구:</strong> 금장남자(여)투구 (무장 -10, 내구 3만, 재생 20) / 주홍투구 (무장 -9, 체마 500, 힘 3, 민지재 2, 마방 1, 수리O)</li>
+                                    <li><strong>방어구:</strong> 50렙 갑옷 (무장 -33, 내구 9만) / 86렙 갑옷 (무장 -32~-46, 내구 500만, 수리X)</li>
+                                    <li><strong>반지류:</strong> 인어반지 (무장 -7, 체 200, 마 250, 힘민지 1) / 진주반지 (무장 -7, Hit 3, Dam 3, 체마 200, 지 1, 재생 1, 마방 1, 수리X)</li>
+                                    <li><strong>보조:</strong> 상해 (무장 -2) / 직업별 목걸이 (체 200 또는 마 100)</li>
+                                </ul>
+                                <h4>■ 4차 승급</h4>
+                                <ul>
+                                    <li><strong>투구:</strong> 용왕의투구 (무장 -11, Hit 4, Dam 4, 체마 900, 힘 6, 민 5, 지 4, 마방 1, 재생 2, 수리O)</li>
+                                    <li><strong>방어구:</strong> 3차 승급옷 (무장 -36~-49, 내구 100만, 수리O) / 800층 산신옷 (무장 -40~-45, 체 600, 마 300, 수리O)</li>
+                                    <li><strong>반지류:</strong> 75렙 녹호박 반지류 (무장 -6~-9, 체 200~400, 마 0~250, 마방 1, 재생 2, 수리X) / 용왕의반지 (무장 -9, 체마 600, 힘민 1, 지 5, 마방 1, 수리O)</li>
+                                    <li><strong>보조:</strong> 시력회복의귀걸이 (흉노 사냥시 필수, 수리X)</li>
+                                </ul>
+                                <hr>
+                                <h3>[가성비 무기 세팅]</h3>
+                                <div class="tip-box"><strong>💡 아카닉 팁:</strong><br>주술사와 도사는 무기 의존도가 매우 적어 생략 가능합니다.</div>
+                                <ul>
+                                    <li><strong>전사:</strong> 비철단도 → 현철중검 (대지의힘) → 다문창 (Dam 2, 힘민지 5) → 녹호박별검 (Hit 6, Dam 1, 체 4000, 마 500, 힘 1) → 검성기검 (체 2만, 힘민지 10, 사성격)</li>
+                                    <li><strong>도적:</strong> 비철단도 → 일월대도/도깨비방망이 → 이가닌자의검 (Hit 5, Dam 4) → 녹호박별도 (Hit 6, Dam 1, 체 4000, 마 500, 힘 1) → 태성태도 (체 2만, 힘민지 10, 사성격)</li>
+                                    <li><strong>주술사:</strong> 비철단도 → 칠교칠선/인풍죽선 → 인어장군지팡이 (체마 400, 힘민지 5) → 녹호박별곤 (무장 -1, 체 300, 마 2000, 지 2, 마방 2) → 현자금봉 (마 1만, 힘민지 10, 사성격)</li>
+                                    <li><strong>도사:</strong> 비철단도 → 칠교/인풍 → 인어장군지팡이 → 녹호박별봉 (무장 -1, 체 300, 마 2000, 힘민지 10, 마방 2) → 진선역봉 (마 1만, 힘민지 10, 사성격)</li>
+                                </ul>
+                            `
+                        },
+                        {
+                            text: "2. 프리미엄(성능) 방어구/무기",
+                            result: `
+                                <h3>[프리미엄 방어구 세팅]</h3>
+                                <ul>
+                                    <li><strong>투구:</strong> 황금투구 (무장 -12, 체마 800, 힘민지 5, 마방 1, 재생 2, 수리O) / 세시투구 (무장 -7, 체마 100, 내구도보호 50%)</li>
+                                    <li><strong>투구(대체재):</strong> 연홍/연청투구'미구현' (무장 -8, Hit 3, Dam 2, 체마 1000, 힘 4, 민 3, 내구도보호 70%)</li>
+                                    <li><strong>방어구:</strong> 해골갑옷 (무장 -45, 체 -500, 마 300, 수리O ※ 술사/도사 추천)</li>
+                                    <li><strong>반지류:</strong> 황금 장갑/팔찌/반지/선류 (무장 -10, 체/마 300~800) / 연위팔찌 (무장 -10, Hit 2, Dam 2, 체 500, 마 200, 힘 1, 민 3, 재생 2, 마방 1)</li>
+                                    <li><strong>반지(대체재):</strong> 적호박팔찌 (무장 -10, Hit 2, Dam 3, 체 200, 마 100, 마방 1, 재생 2, 수리X)</li>
+                                    <li><strong>보조:</strong> 보무의목걸이 (자동 보무) / 투명구두 (자동 투명) / 금편의목걸이 (무장 -2, Hit 1, Dam 1, 체마 500, 힘민지 3)</li>
+                                </ul>
+                                <hr>
+                                <h3>[프리미엄 무기 세팅 (성능)]</h3>
+                                <h4>■ 99 이전</h4>
+                                <ul>
+                                    <li><strong>진명삼지창:</strong> Hit 3, Dam 1, 힘 20 이상, 수리O</li>
+                                    <li><strong>이가닌자의검:</strong> Hit 5, Dam 4, 체 300, 마 200, 힘민지 5, 수리X (내구도 소모 심함)</li>
+                                </ul>
+                                <h4>■ 중자본 이상 (공용)</h4>
+                                <ul>
+                                    <li><strong>심판의낫:</strong> 체마 7000, 힘 15, 지 10, 마방 1, 재생 50, 수리O</li>
+                                    <li><strong>천풍선:</strong> 마 1200, 지 15, 재생 50, 수리O</li>
+                                    <li><strong>정화의방패 (방패):</strong> 무장 -7, 체마 300, 힘민지 2, 수리O</li>
+                                </ul>
+                                <h4>■ 초고자본 (용무기 & 전설)</h4>
+                                <ul>
+                                    <li><strong>전사:</strong> 용마제삼검 (Hit 7, Dam 2) / 진일신검 (Hit 7, Dam 2, 체 2.5%, 힘민지 10)</li>
+                                    <li><strong>도적:</strong> 용천제삼검 (Hit 7, Dam 2) / 청월기창 (Hit 7, Dam 2, 체 2.5%, 힘민지 10)</li>
+                                    <li><strong>주술사:</strong> 용랑제삼봉 (저주격 +37, 헬파이어 딜레이 -10%) / 황화곤봉 (마 300, 힘민지 2, 숨겨진옵션 마 2.5%)</li>
+                                    <li><strong>도사:</strong> 용겸제삼봉 (저주격 +57, 백호의희원 딜레이 -10%) / 적화접선 (체마 300, 힘민지 2, 숨겨진옵션 마 2.5%)</li>
+                                </ul>
+                            `
+                        }
                     ]
                 }
             }
@@ -151,21 +248,25 @@
 
     let historyStack = [];
     const treeMenuEl = document.getElementById('tree-menu');
+    const questionEl = document.getElementById('question');
+    const contentEl = document.getElementById('content');
+    const navBtns = document.getElementById('nav-btns');
 
-    function buildTree(node, container) {
+    function buildTree(node, container, prefix = "") {
         if (node.options) {
             node.options.forEach(opt => {
                 const li = document.createElement('li');
                 li.className = "tree-item";
                 const a = document.createElement('a');
                 a.className = "tree-link";
-                a.innerText = opt.text;
+                a.innerText = prefix + opt.text;
                 a.onclick = () => { historyStack = [guideData]; render(opt.next || opt); };
                 li.appendChild(a);
+
                 if (opt.next && opt.next.options) {
                     const subUl = document.createElement('ul');
                     subUl.className = "tree-sub";
-                    buildTree(opt.next, subUl);
+                    buildTree(opt.next, subUl, "");
                     li.appendChild(subUl);
                 }
                 container.appendChild(li);
@@ -174,31 +275,56 @@
     }
 
     function render(node, isBack = false) {
-        if (!isBack) historyStack.push(node);
-        const contentEl = document.getElementById('content');
-        const questionEl = document.getElementById('question');
+        if (!isBack) {
+            historyStack.push(node);
+        }
+        
         contentEl.innerHTML = '';
         
         if (node.result) {
-            questionEl.innerText = node.text || "가이드 결과";
+            questionEl.innerText = node.text || "가이드 결과"; 
             contentEl.innerHTML = `<div class="result">${node.result}</div>`;
         } else {
             questionEl.innerText = node.title || "항목을 선택하세요";
+            
             node.options.forEach(opt => {
                 const btn = document.createElement('button');
                 btn.innerText = opt.text;
-                btn.onclick = () => render(opt.next || opt);
+                btn.onclick = () => {
+                    if (opt.next) {
+                        render(opt.next);
+                    } else {
+                        render(opt); 
+                    }
+                };
                 contentEl.appendChild(btn);
             });
         }
-        document.getElementById('nav-btns').style.display = historyStack.length > 1 ? 'flex' : 'none';
+
+        if (historyStack.length > 1) {
+            navBtns.style.display = 'flex';
+        } else {
+            navBtns.style.display = 'none';
+        }
     }
 
-    function goBack() { if (historyStack.length > 1) { historyStack.pop(); render(historyStack.pop()); } }
-    function goHome() { historyStack = []; render(guideData); }
+    function goBack() {
+        if (historyStack.length > 1) {
+            historyStack.pop(); 
+            const prevNode = historyStack[historyStack.length - 1]; 
+            render(prevNode, true); 
+        }
+    }
 
+    function goHome() {
+        historyStack = [];
+        render(guideData);
+    }
+
+    // 초기 실행
     buildTree(guideData, treeMenuEl);
     render(guideData);
 </script>
+
 </body>
 </html>

@@ -116,6 +116,9 @@
 
 <nav id="sidebar">
     <h2>목차 바로가기</h2>
+    <input type="text" id="searchBox" placeholder="검색..." 
+style="width:100%; padding:6px; margin-bottom:10px;" 
+oninput="searchGuide(this.value)">
     <ul class="tree-root" id="tree-menu"></ul>
 </nav>
 
@@ -624,15 +627,20 @@
     }
 
     function render(node, isBack = false) {
+       currentPage = node.title || node.text;
         if (!isBack) {
             historyStack.push(node);
         }
         
         contentEl.innerHTML = '';
         
-        if (node.result) {
-            questionEl.innerText = node.text || "가이드 결과"; 
-            contentEl.innerHTML = `<div class="result">${node.result}</div>`;
+       if (node.result) {
+    questionEl.innerText = node.text || "가이드 결과"; 
+    contentEl.innerHTML = `
+        <button onclick="toggleFavorite()" style="margin-bottom:10px;">⭐ 즐겨찾기</button>
+        <div class="result">${node.result}</div>
+    `;
+}
         } else {
             questionEl.innerText = node.title || "항목을 선택하세요";
             
@@ -676,4 +684,81 @@
 </script>
 
 </body>
+    // ===== 검색 기능 =====
+function searchGuide(keyword) {
+    const items = document.querySelectorAll('.tree-link');
+    items.forEach(el => {
+        if (el.innerText.toLowerCase().includes(keyword.toLowerCase())) {
+            el.style.display = 'block';
+        } else {
+            el.style.display = 'none';
+        }
+    });
+}
+
+// ===== 트리 펼침/접힘 =====
+setTimeout(() => {
+    document.querySelectorAll('.tree-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const sub = this.nextElementSibling;
+            if (sub && sub.classList.contains('tree-sub')) {
+                e.preventDefault();
+                sub.style.display = sub.style.display === 'none' ? 'block' : 'none';
+            }
+        });
+    });
+}, 100);
+
+// ===== 즐겨찾기 =====
+let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+let currentPage = null;
+
+function toggleFavorite() {
+    if (!currentPage) return;
+    const idx = favorites.indexOf(currentPage);
+    if (idx > -1) {
+        favorites.splice(idx, 1);
+    } else {
+        favorites.push(currentPage);
+    }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    alert('즐겨찾기 저장됨');
+}
+
+// ===== 공성 타이머 =====
+function getNextEventTime() {
+    const now = new Date();
+    const next = new Date();
+    next.setHours(21, 0, 0, 0);
+
+    if (now.getHours() >= 21) {
+        next.setDate(next.getDate() + 1);
+    }
+    return next;
+}
+
+function updateEventTimer() {
+    const now = new Date();
+    const next = getNextEventTime();
+    const diff = next - now;
+
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+
+    const timerText = `다음 공성까지: ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+
+    let el = document.getElementById('event-timer');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'event-timer';
+        el.style.marginTop = '5px';
+        el.style.fontSize = '0.75rem';
+        document.querySelector('.clock-widget').appendChild(el);
+    }
+    el.innerText = timerText;
+}
+
+setInterval(updateEventTimer, 1000);
+updateEventTimer();
 </html>

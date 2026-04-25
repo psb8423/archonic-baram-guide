@@ -279,7 +279,7 @@
         <div class='tip-box'>※ 영웅의길 X, 도와주는 사람 X 가정의 루트.</div>
     `;
 
-    const guideData = {
+   const guideData = {
         title: "아카닉 옛날바람 가이드",
         options: [
             {
@@ -435,13 +435,26 @@
                 }
             },
             {
-                text: "4. 승급가이드",
+                text: "4. 자본별 파밍",
+                result: `
+                    <h3>[자본별 추천 파밍 루트]</h3>
+                    <p>내용에 맞는 사진 두 장을 아래에 배치했습니다.</p>
+                    <a href='hunt pre 1.png' target='_blank' title='클릭해서 확대 보기'><img src='hunt pre 1.png' class='zoom-img'></a>
+                    <a href='hunt pre 2.png' target='_blank' title='클릭해서 확대 보기'><img src='hunt pre 2.png' class='zoom-img'></a>
+                    <ul>
+                        <li><strong>무자본:</strong> 쥐굴/뱀굴 고기 파밍 → 돼지굴 노가다 → 흉가 호박 파밍</li>
+                        <li><strong>중자본:</strong> 깹무기 조합 노가다 → 용궁 장군굴 심장 파밍 → 북방 대초원</li>
+                        <li><strong>고자본:</strong> 북방 고층 재료 파밍 → 레이드 보스 직할 → 흉노족 금전 파밍</li>
+                    </ul>
+                    <div class='tip-box'>※ 본인의 장비 수준과 직업에 맞는 사냥터를 선택하는 것이 가장 효율적입니다.</div>
+                `
+            },
+            {
+                text: "5. 승급가이드",
                 next: {
                     title: "승급 단계를 선택하세요",
                     options: [
                         {
-                            text: "1) 1, 2차 승급",
-                           {
                             text: "1) 1, 2차 승급",
                             result: `
                                 <h3>[1, 2차 승급 가이드]</h3>
@@ -519,7 +532,7 @@
                 }
             },
             {
-                text: "5. 레이드 보스공략",
+                text: "6. 레이드 보스공략",
                 next: {
                     title: "레이드 보스를 선택하세요",
                     options: [
@@ -576,7 +589,7 @@
                 }
             },
             {
-                text: "6. 용궁가이드",
+                text: "7. 용궁가이드",
                 next: {
                     title: "용궁 가이드 항목을 선택하세요",
                     options: [
@@ -666,7 +679,85 @@
                 }
             },
             {
-                text: "7. 동귀어진 문파소개",
+                text: "8. 중국퀘스트 가이드",
+                next: {
+                    title: "중국 퀘스트 지역을 선택하세요",
+                    options: [
+                        { 
+                            text: "1) 중국 북부", 
+                            result: `
+                                <h3>[중국 북부 퀘스트]</h3>
+                                <ul>
+                                    <li><strong>만리장성 수리:</strong> 벽돌을 가져다주어 보상 획득</li>
+                                    <li><strong>천구/선묘 퀘스트:</strong> 특정 몬스터 퇴치 및 아이템 수집</li>
+                                </ul>
+                                <div class='tip-box'>중국 북부는 지형이 넓으므로 이동 수단을 미리 확보하는 것이 좋습니다.</div>
+                            `
+                        },
+                        { 
+                            text: "2) 중국 남부", 
+                            result: `
+                                <h3>[중국 남부 퀘스트]</h3>
+                                <ul>
+                                    <li><strong>낙양성/광동성 퀘스트:</strong> 남부 지역의 주요 NPC들과 대화하여 진행</li>
+                                    <li><strong>신수 관련 퀘스트:</strong> 특정 레벨 이상 진행 가능한 중급 퀘스트</li>
+                                </ul>
+                            `
+                        },
+                        { 
+                            text: "3) 도삭산", 
+                            result: `
+                                <h3>[도삭산 퀘스트]</h3>
+                                <ul>
+                                    <li><strong>100층~1000층 상점 퀘스트:</strong> 각 층의 NPC가 요구하는 물건을 가져다주고 보상 획득</li>
+                                    <li><strong>핵심 보상:</strong> 투구 방어구 및 각종 소비 아이템</li>
+                                </ul>
+                                <div class='tip-box'>도삭산은 층별로 난이도가 급격히 상승하므로 본인의 레벨에 맞는 층에서 진행하세요.</div>
+                            `
+                        }
+                    ]
+                }
+            },
+            {
+                text: "9. 환상의섬 가이드",
+                next: {
+                    title: "환상의섬 항목을 선택하세요",
+                    options: [
+                        { 
+                            text: "1) 도시락 레시피", 
+                            result: `
+                                <h3>[도시락 제작 레시피]</h3>
+                                <p>레시피 정보를 담은 사진 두 장입니다.</p>
+                                <a href='dosirak 1.png' target='_blank' title='클릭해서 확대 보기'><img src='dosirak 1.png' class='zoom-img'></a>
+                                <a href='dosirak 2.png' target='_blank' title='클릭해서 확대 보기'><img src='dosirak 2.png' class='zoom-img'></a>
+                                <div class='tip-box'><strong>💡 팁:</strong> 재료 수집이 까다로우니 한 번에 많이 모아서 제작하는 것을 추천합니다.</div>
+                            `
+                        },
+                        { 
+                            text: "2) 아이템 제작", 
+                            result: `
+                                <h3>[환상의섬 아이템 제작]</h3>
+                                <ul>
+                                    <li><strong>진'수정의검:</strong> 수정의검 + 영웅의이슬 등</li>
+                                    <li><strong>청의기창:</strong> 환상의섬 보스 재료를 이용한 강력한 무기</li>
+                                </ul>
+                            `
+                        },
+                        { 
+                            text: "3) 퀘스트", 
+                            result: `
+                                <h3>[환상의섬 메인/서브 퀘스트]</h3>
+                                <ul>
+                                    <li><strong>명수사관 퀘스트:</strong> 섬의 미스터리를 풀고 보상 획득</li>
+                                    <li><strong>10만전 퀘스트:</strong> 초반 금전 수급의 필수 코스</li>
+                                </ul>
+                            `
+                        }
+                    ]
+                }
+            },
+            {
+                text: "10. 동귀어진 문파소개",
                 result: `
                     <h3>[★동귀어진★ 문파소개]</h3>
                     <h4>■ 사냥 / 친목 문파 ★동귀어진★ 에서 신규 문원을 모십니다.</h4>
@@ -706,7 +797,6 @@
             }
         ]
     };
-
     // ===== 트리 메뉴 빌드 =====
     function buildTree(node, container, prefix = "") {
         if (node.options) {

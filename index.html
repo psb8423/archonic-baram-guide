@@ -22,6 +22,19 @@
         .helpful-links a { color: #007bff; text-decoration: none; font-weight: bold; transition: 0.2s; }
         .helpful-links a:hover { color: #0056b3; text-decoration: underline; }
 
+        /* 즐겨찾기 목록 패널 (우측) */
+        .fav-panel { background: rgba(255, 255, 255, 0.95); padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); text-align: left; display: flex; flex-direction: column; gap: 4px; border: 1px solid #ddd; width: 100%; box-sizing: border-box; }
+        .fav-panel h3 { font-weight: bold; color: #333; margin: 0 0 5px 0; border-bottom: 1px solid #ccc; padding-bottom: 4px; text-align: center; font-size: 0.85rem; }
+        .fav-list { list-style: none; padding: 0; margin: 0; }
+        .fav-item { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px dashed #eee; gap: 5px; }
+        .fav-item:last-child { border-bottom: none; }
+        /* 이름 잘리지 않게 처리 및 폰트 축소 */
+        .fav-link { color: #007bff; text-decoration: none; cursor: pointer; transition: 0.2s; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1; }
+        .fav-link:hover { color: #0056b3; text-decoration: underline; }
+        /* X 버튼 축소 */
+        .fav-del { color: #dc3545; cursor: pointer; font-size: 0.65rem; border: none; background: none; padding: 2px 4px; font-weight: bold; border-radius: 4px; flex-shrink: 0; }
+        .fav-del:hover { background: #f8d7da; }
+
         /* 디지털 시계 및 안내문 스타일 */
         .clock-widget { 
             background: linear-gradient(135deg, #87CEEB 0%, #192f6a 100%);
@@ -42,7 +55,7 @@
         .notice-text .highlight { color: #ffeb3b; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
         .notice-text .sub-text { font-size: 0.7rem; color: #cfd8dc; margin-top: 3px; display: block; font-weight: bold; }
 
-        /* 좌측 트리 목차 및 즐겨찾기 */
+        /* 좌측 트리 목차 */
         #sidebar { width: 280px; background: #343a40; color: #fff; padding: 20px; overflow-y: auto; height: 100vh; position: sticky; top: 0; flex-shrink: 0; text-align: left; display: flex; flex-direction: column; }
         #sidebar h2 { font-size: 1.1rem; border-bottom: 1px solid #555; padding-bottom: 10px; margin-bottom: 15px; color: #ffc107; }
         .tree-root { list-style: none; padding: 0; font-size: 0.85rem; flex-grow: 1;}
@@ -50,16 +63,6 @@
         .tree-link { color: #ccc; text-decoration: none; cursor: pointer; transition: 0.2s; display: block; padding: 3px 0; }
         .tree-link:hover { color: #fff; transform: translateX(5px); }
         .tree-sub { list-style: none; padding-left: 15px; margin: 5px 0; border-left: 1px solid #555; }
-
-        /* 즐겨찾기 목록 CSS */
-        .fav-section { margin-top: 20px; border-top: 1px solid #555; padding-top: 15px; }
-        .fav-section h3 { font-size: 1rem; color: #ffeb3b; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
-        .fav-list { list-style: none; padding: 0; font-size: 0.85rem; margin: 0; }
-        .fav-item { margin: 8px 0; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 5px 8px; border-radius: 5px; }
-        .fav-link { color: #fff; text-decoration: none; cursor: pointer; transition: 0.2s; flex-grow: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .fav-link:hover { color: #ffc107; }
-        .fav-del { color: #ff4c4c; cursor: pointer; font-size: 0.8rem; border: none; background: none; padding: 0 5px; font-weight: bold; }
-        .fav-del:hover { color: #ff0000; }
 
         /* 메인 컨텐츠 영역 */
         #main-container { flex-grow: 1; display: flex; justify-content: center; padding: 40px 20px; }
@@ -132,17 +135,17 @@
         <a href="https://oldbaramtools.com/" target="_blank">1) 옛바도구</a>
         <a href="https://arca.live/b/baramclassic" target="_blank">2) 옛날바람채널</a>
     </div>
+
+    <div class="fav-panel">
+        <h3>⭐ 내 즐겨찾기</h3>
+        <ul id="favorites-list" class="fav-list"></ul>
+    </div>
 </div>
 
 <nav id="sidebar">
     <h2>목차 바로가기</h2>
     <input type="text" id="searchBox" placeholder="검색..." style="width:100%; padding:8px; margin-bottom:10px; border-radius: 5px; border: none; box-sizing: border-box;" oninput="searchGuide(this.value)">
     <ul class="tree-root" id="tree-menu"></ul>
-    
-    <div class="fav-section">
-        <h3>⭐ 내 즐겨찾기</h3>
-        <ul id="favorites-list" class="fav-list"></ul>
-    </div>
 </nav>
 
 <main id="main-container">
@@ -303,7 +306,7 @@
                                     { text: "3) 1차 (술사)", result: `<h3>[1차 술사] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/YAyILbR7gXw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>마력 6만~:</strong> 신극지방 (시간당 9~12억)</li></ul><div class='tip-box'><strong>💡 아카닉 추천 루트:</strong><br>흉가 + 높산적(무사)쩔 → <strong>(1차) 신극지방 + 높산적(무사)쩔</strong><br><br>※ 선녀 쩔: 시간당 30억<br>※ 무사/산적 쩔: 시간당 45~55억</div>` },
                                     { text: "4) 2차 (현사)", result: `<h3>[2차 현사] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/YAyILbR7gXw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>마력 25만~:</strong> 중산적 (시간당 18~24억)</li><li><strong>마력 39만~ (솔플):</strong> 높산적 (시간당 30~36억)</li><li><strong>마력 36만~(격도술) / 45만~(솔플):</strong> 도삭산 800층 (시간당 45~55억)</li></ul><div class='tip-box'><strong>💡 아카닉 추천 루트:</strong><br>(1차) 신극지방 → <strong>(2차) 800층 격도술 + 선비쩔</strong><br><br>※ 2차 선비 쩔(밀대): 시간당 80~90억</div>` },
                                     { text: "5) 3차 (현인)", result: `<h3>[3차 현인] 사냥터 (선비족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>마력 34만 (저주+마기):</strong> 선비족 (솔플: 50~55억 / 떱헬: 65~70억)</li><li><strong>마력 54만 (격도술):</strong> 선비족 (격도술: 60~65억)</li></ul><div class='tip-box'><strong>💡 아카닉 추천 루트:</strong><br>(2차) 800층 → <strong>(3차) 선비족 격도술</strong><br><br>※ 3차 선비 밀대: 시간당 90~100억</div>` },
-                                    { text: "6) 4차 (현자)", result: `<h3>[4차 현자] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>마력 90만 (격도술):</strong> 낮 흉노 (시간당 160~220억)</li><li><strong>마력 135만~ (격도술):</strong> 도삭산 900층 (시간당 300~350억)</li></ul><a href='hungno exp list.png' target='_blank' title='클릭해서 확대 보기'><img src='hungno exp list.png' class='zoom-img'></a><div class='tip-box'><strong>💡 아카닉 추천 루트:</strong><br>낮흉 격도술<br><br>※ 참고: 격도 82.5%, 격도술 60%</div>` }
+                                    { text: "6) 4차 (현자)", result: `<h3>[4차 현자] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>마력 90만 (격도술):</strong> 낮 흉노 (시간당 160~220억)</li><li><strong>마력 135만~ (격도술):</strong> 도삭산 900층 (시간당 300~350억)</li></ul><a href='hungno exp list.png' target='_blank' title='클릭해서 확대 보기'><img src='hungno exp list.png' class='zoom-img'></a><a href='warrior 900.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior 900.png' class='zoom-img'></a><div class='tip-box'><strong>💡 아카닉 추천 루트:</strong><br>낮흉 격도술<br><br>※ 참고: 격도 82.5%, 격도술 60%</div>` }
                                 ]
                             }
                         },
@@ -317,7 +320,7 @@
                                     { text: "3) 1차 (검객)", result: `<h3>[1차 검객] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 8만~:</strong> 닌자 / 선녀 (시간당 22~30억)</li><li><strong>체력 25~30만:</strong> 높산적 밀격 (시간당 45~55억)</li></ul><a href='warrior ninja.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior ninja.png' class='zoom-img'></a><a href='warrior sanjuck.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior sanjuck.png' class='zoom-img'></a>` },
                                     { text: "4) 2차 (검제)", result: `<h3>[2차 검제] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/E382Ctv87Xw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 30~55만:</strong> 선녀 + 닌자 2굴 (시간당 30~32억)</li><li><strong>체력 55~80만:</strong> 도삭산 800층 (시간당 45~55억)</li><li><strong>체력 80~100만:</strong> 선비족 (격도술: 60억 / 밀격: 80~90억)</li></ul><a href='warrior sunnya.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior sunnya.png' class='zoom-img'></a><a href='warrior 800.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior 800.png' class='zoom-img'></a><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 2차 선비 쩔(밀대): 시간당 80~90억</div>` },
                                     { text: "5) 3차 (검황)", result: `<h3>[3차 검황] 사냥터 (선비족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 100~140만:</strong> 선비족 (격도술: 65억 / 반반: 90~100억)</li></ul><a href='warrior sunbi.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior sunbi.png' class='zoom-img'></a><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 3차 선비 밀대: 시간당 90~100억</div>` },
-                                    { text: "6) 4차 (검성)", result: `<h3>[4차 검성] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 140~220만:</strong> 낮 흉노 (격도술: 160~220억 / 격도: 150~220억)</li><li><strong>체력 240만~:</strong> 도삭산 900층 (격도술: 300~350억)</li></ul><a href='warrior lowhungno.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior lowhungno.png' class='zoom-img'></a><a href='warrior 900.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior 900.png' class='zoom-img'></a><div class='tip-box'><strong>💡 참고:</strong><br>※ 격도: 82.5% (75% x 1.1)<br>※ 격도술: 60% (50% x 1.1 x 1.1)</div>` }
+                                    { text: "6) 4차 (검성)", result: `<h3>[4차 검성] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 140~220만:</strong> 낮 흉노 (격도술: 160~220억 / 격도: 150~220억)</li><li><strong>체력 240만~:</strong> 도삭산 900층 (격도술: 300~350억)</li></ul><a href='warrior lowhungno.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior lowhungno.png' class='zoom-img'></a><a href='warrior 900.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior 900.png' class='zoom-img'></a><a href='hungno exp list.png' target='_blank' title='클릭해서 확대 보기'><img src='hungno exp list.png' class='zoom-img'></a><div class='tip-box'><strong>💡 참고:</strong><br>※ 격도: 82.5% (75% x 1.1)<br>※ 격도술: 60% (50% x 1.1 x 1.1)</div>` }
                                 ]
                             }
                         },
@@ -331,7 +334,7 @@
                                     { text: "3) 1차 (자객)", result: `<h3>[1차 자객] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 8만~:</strong> 닌자 / 선녀 (시간당 22~30억)</li><li><strong>체력 30만:</strong> 무사의방 밀격 (시간당 45~55억)</li></ul><a href='warrior ninja.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior ninja.png' class='zoom-img'></a>` },
                                     { text: "4) 2차 (진검)", result: `<h3>[2차 진검] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/E382Ctv87Xw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 30~55만:</strong> 선녀 + 닌자 2굴 (시간당 30~32억)</li><li><strong>체력 55~80만:</strong> 도삭산 800층 (시간당 45~55억)</li><li><strong>체력 80~100만:</strong> 선비족 (격도술: 60억 / 밀격: 80~90억)</li></ul><a href='warrior sunnya.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior sunnya.png' class='zoom-img'></a><a href='warrior 800.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior 800.png' class='zoom-img'></a><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 2차 선비 쩔(밀대): 시간당 80~90억</div>` },
                                     { text: "5) 3차 (귀검)", result: `<h3>[3차 귀검] 사냥터 (선비족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 100~140만:</strong> 선비족 (격도술: 65억 / 반반: 90~100억)</li></ul><a href='warrior sunbi.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior sunbi.png' class='zoom-img'></a><div class='tip-box'><strong>💡 쩔/밀대 참고:</strong><br>※ 3차 선비 밀대: 시간당 90~100억</div>` },
-                                    { text: "6) 4차 (태성)", result: `<h3>[4차 태성] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 140~220만:</strong> 낮 흉노 (격도술: 160~220억 / 격도: 150~220억)</li><li><strong>체력 240만~:</strong> 도삭산 900층 (격도술: 300~350억)</li></ul><a href='warrior lowhungno.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior lowhungno.png' class='zoom-img'></a><a href='warrior 900.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior 900.png' class='zoom-img'></a><div class='tip-box'><strong>💡 참고:</strong><br>※ 격도: 82.5% (75% x 1.1)<br>※ 격도술: 60% (50% x 1.1 x 1.1)</div>` }
+                                    { text: "6) 4차 (태성)", result: `<h3>[4차 태성] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>체력 140~220만:</strong> 낮 흉노 (격도술: 160~220억 / 격도: 150~220억)</li><li><strong>체력 240만~:</strong> 도삭산 900층 (격도술: 300~350억)</li></ul><a href='warrior lowhungno.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior lowhungno.png' class='zoom-img'></a><a href='warrior 900.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior 900.png' class='zoom-img'></a><a href='hungno exp list.png' target='_blank' title='클릭해서 확대 보기'><img src='hungno exp list.png' class='zoom-img'></a><div class='tip-box'><strong>💡 참고:</strong><br>※ 격도: 82.5% (75% x 1.1)<br>※ 격도술: 60% (50% x 1.1 x 1.1)</div>` }
                                 ]
                             }
                         },
@@ -345,7 +348,7 @@
                                     { text: "3) 1차 (도인)", result: `<h3>[1차 도인] 사냥터</h3><ul><li><strong>흉가:</strong> 시간당 12~15억</li><li><strong>닌자의방:</strong> 시간당 21억 내외</li></ul><a href='warrior ninja.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior ninja.png' class='zoom-img'></a>` },
                                     { text: "4) 2차 (명인)", result: `<h3>[2차 명인] 사냥터</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/qCHiE24Kk6k' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/E382Ctv87Xw' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>선녀의방:</strong> 시간당 28~32억</li><li><strong>마력 30만~:</strong> 도삭산 800층 (시간당 45~55억)</li><li><strong>선비반반:</strong> 시간당 80~100억 (금전 약 30만전 소모)</li></ul><a href='warrior 800.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior 800.png' class='zoom-img'></a>` },
                                     { text: "5) 3차 (진인)", result: `<h3>[3차 진인] 사냥터 (선비족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/58KK3Ww67X4' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>선비족 격도술:</strong> 약 60억 (마력 낮을 때 추천)</li><li><strong>선비족 격도:</strong> 약 80억</li></ul>` },
-                                    { text: "6) 4차 (진선)", result: `<h3>[4차 진선] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>낮 흉노 격도술:</strong> 160억(마력 80만) ~ 230억(마력 110만)</li><li><strong>마력 140만~:</strong> 도삭산 900층 격도술 (시간당 320~350억)</li></ul><a href='warrior lowhungno.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior lowhungno.png' class='zoom-img'></a><a href='warrior 900.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior 900.png' class='zoom-img'></a>` }
+                                    { text: "6) 4차 (진선)", result: `<h3>[4차 진선] 사냥터 (흉노족)</h3><div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/-MyhwWNkF-Y' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div><ul><li><strong>낮 흉노 격도술:</strong> 160억(마력 80만) ~ 230억(마력 110만)</li><li><strong>마력 140만~:</strong> 도삭산 900층 격도술 (시간당 320~350억)</li></ul><a href='warrior lowhungno.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior lowhungno.png' class='zoom-img'></a><a href='warrior 900.png' target='_blank' title='클릭해서 확대 보기'><img src='warrior 900.png' class='zoom-img'></a><a href='hungno exp list.png' target='_blank' title='클릭해서 확대 보기'><img src='hungno exp list.png' class='zoom-img'></a>` }
                                 ]
                             }
                         }
@@ -448,7 +451,7 @@
                                 <h4>■ 2차 승급 추천 체력/마력</h4>
                                 <table class="stat-table">
                                     <tr><th>직업</th><th>검제(전사)</th><th>진검(도적)</th><th>현사(주술)</th><th>명인(도사)</th></tr>
-                                    <tr><td>체력</td><td class="hp-text">30만</td><td class="hp-text">30만</td><td class="hp-text">15만</td><td class="hp-text">8만(풀승7만)</td></tr>
+                                    <tr><td>체력</td><td class="hp-text">30만</td><td class="hp-text">30만</td><td class="hp-text">15만</td><td class="hp-text">8만</td></tr>
                                     <tr><td>마력</td><td class="mp-text">-</td><td class="mp-text">-</td><td class="mp-text">10만</td><td class="mp-text">7만</td></tr>
                                 </table>
 
@@ -739,7 +742,6 @@
         if (node.result) {
             questionEl.innerText = node.text || "가이드 결과"; 
             
-            // 현재 페이지가 즐겨찾기 상태인지 확인
             const isFav = favorites.includes(currentPage);
             const favText = isFav ? "⭐ 즐겨찾기 해제" : "⭐ 즐겨찾기 추가";
 
@@ -784,7 +786,7 @@
         render(guideData);
     }
 
-    // ===== 즐겨찾기 & 트리 검색 기능 =====
+    // ===== 검색 기능 =====
     function searchGuide(keyword) {
         const items = document.querySelectorAll('.tree-item');
         items.forEach(el => {
@@ -797,11 +799,12 @@
         });
     }
 
+    // ===== 즐겨찾기 렌더링 =====
     function renderFavorites() {
         const listEl = document.getElementById('favorites-list');
         listEl.innerHTML = '';
         if (favorites.length === 0) {
-            listEl.innerHTML = '<li style="color:#888;">추가된 즐겨찾기가 없습니다.</li>';
+            listEl.innerHTML = '<li style="color:#888; font-size:0.75rem; text-align:center; padding:10px 0;">저장된 항목 없음</li>';
             return;
         }
         favorites.forEach((favTitle, index) => {
@@ -821,7 +824,6 @@
                 favorites.splice(index, 1);
                 localStorage.setItem('favorites', JSON.stringify(favorites));
                 renderFavorites();
-                // 화면 갱신을 위해 현재 페이지 리렌더링 (버튼 텍스트 갱신 등)
                 const current = historyStack[historyStack.length - 1];
                 if(current) render(current, true); 
             };
@@ -870,7 +872,6 @@
         localStorage.setItem('favorites', JSON.stringify(favorites));
         renderFavorites();
         
-        // 현재 페이지의 버튼 텍스트 변경을 위해 다시 렌더링
         const current = historyStack[historyStack.length - 1];
         if(current) render(current, true); 
     }
@@ -878,7 +879,7 @@
     // 초기 실행
     buildTree(guideData, treeMenuEl);
     render(guideData);
-    renderFavorites(); // 저장된 즐겨찾기 불러오기
+    renderFavorites();
 </script>
 
 </body>

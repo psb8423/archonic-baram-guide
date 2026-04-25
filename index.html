@@ -9,7 +9,6 @@
         body { font-family: 'Apple SD Gothic Neo', sans-serif; background-color: var(--bg-color); display: flex; margin: 0; min-height: 100vh; }
         
         /* 1시 방향 워터마크 & 링크, 시계 컨테이너 */
-        /* 너비를 200px에서 175px로 줄여 불필요한 여백 컷팅 */
         .watermark-container { position: fixed; top: 15px; right: 15px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; width: 175px; }
         
         .watermark { transition: transform 0.3s; display: flex; flex-direction: column; align-items: center; text-decoration: none; gap: 6px; }
@@ -23,23 +22,24 @@
         .helpful-links a { color: #007bff; text-decoration: none; font-weight: bold; transition: 0.2s; }
         .helpful-links a:hover { color: #0056b3; text-decoration: underline; }
 
-        /* 디지털 시계 및 안내문 스타일 (디자인 변경) */
+        /* 디지털 시계 및 안내문 스타일 */
         .clock-widget { 
-            background: linear-gradient(135deg, #87CEEB 0%, #192f6a 100%); /* 하늘색~남색 그라데이션 */
+            background: linear-gradient(135deg, #87CEEB 0%, #192f6a 100%);
             padding: 10px 10px; 
             border-radius: 8px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
             text-align: center; 
             width: 100%; 
             box-sizing: border-box; 
-            color: #ffffff; /* 기본 글자색 흰색 */
+            color: #ffffff; 
             border: 1px solid rgba(255,255,255,0.2);
         }
         #current-date { font-size: 0.75rem; color: #e0f7fa; font-weight: bold; margin-bottom: 4px; }
         #current-time { font-size: 1.3rem; font-weight: bold; color: #ffffff; letter-spacing: 0.5px; font-family: monospace; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+        #event-timer { font-size: 0.8rem; color: #ffeb3b; font-weight: bold; margin-top: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
         .clock-widget hr { border: 0; height: 1px; background: rgba(255, 255, 255, 0.3); margin: 8px 0; }
         .notice-text { font-size: 0.75rem; line-height: 1.4; color: #f8f9fa; }
-        .notice-text .highlight { color: #ffeb3b; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); } /* 대비를 위해 붉은색 대신 밝은 노란색 사용 */
+        .notice-text .highlight { color: #ffeb3b; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
         .notice-text .sub-text { font-size: 0.7rem; color: #cfd8dc; margin-top: 3px; display: block; font-weight: bold; }
 
         /* 좌측 트리 목차 */
@@ -80,13 +80,15 @@
         .back-btn:hover { background: #5a6268; }
         .home-btn { background: #dc3545; }
         .home-btn:hover { background: #c82333; }
+        
+        .fav-btn { background-color: #ffc107; color: #333; font-size: 0.9rem; padding: 10px; margin-bottom: 15px; }
+        .fav-btn:hover { background-color: #e0a800; }
 
         /* 모바일 대응 */
         @media (max-width: 768px) {
             body { flex-direction: column; }
             #sidebar { width: 100%; height: auto; position: relative; padding: 15px; box-sizing: border-box; }
             #main-container { padding: 20px 10px; }
-            /* 모바일에서도 위젯 너비 최적화 */
             .watermark-container { top: auto; bottom: 15px; right: 15px; align-items: flex-end; width: 175px; }
         }
     </style>
@@ -102,9 +104,9 @@
     <div class="clock-widget">
         <div id="current-date">0000년 00월 00일 (요일)</div>
         <div id="current-time">00:00:00</div>
-        <hr id="notice-hr">
+        <div id="event-timer">다음 공성까지: 00:00:00</div> <hr id="notice-hr">
         <div class="notice-text" id="daily-notice">
-            </div>
+        </div>
     </div>
 
     <div class="helpful-links">
@@ -116,9 +118,7 @@
 
 <nav id="sidebar">
     <h2>목차 바로가기</h2>
-    <input type="text" id="searchBox" placeholder="검색..." 
-style="width:100%; padding:6px; margin-bottom:10px;" 
-oninput="searchGuide(this.value)">
+    <input type="text" id="searchBox" placeholder="검색..." style="width:100%; padding:8px; margin-bottom:10px; border-radius: 5px; border: none; box-sizing: border-box;" oninput="searchGuide(this.value)">
     <ul class="tree-root" id="tree-menu"></ul>
 </nav>
 
@@ -134,13 +134,23 @@ oninput="searchGuide(this.value)">
 </main>
 
 <script>
-    // 시계 및 요일별 안내문구 업데이트 기능
+    // ===== 글로벌 변수 설정 =====
+    let historyStack = [];
+    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    let currentPage = null;
+    
+    const treeMenuEl = document.getElementById('tree-menu');
+    const questionEl = document.getElementById('question');
+    const contentEl = document.getElementById('content');
+    const navBtns = document.getElementById('nav-btns');
+
+    // ===== 시계 및 요일별 안내문구 업데이트 기능 =====
     function updateClock() {
         const now = new Date();
         const year = now.getFullYear();
         const month = now.getMonth() + 1;
         const date = now.getDate();
-        const dayOfWeek = now.getDay(); // 0:일, 1:월, 2:화, 3:수, 4:목, 5:금, 6:토
+        const dayOfWeek = now.getDay(); 
         const days = ['일', '월', '화', '수', '목', '금', '토'];
         const day = days[dayOfWeek];
         
@@ -151,34 +161,60 @@ oninput="searchGuide(this.value)">
         document.getElementById('current-date').innerText = `${year}년 ${month}월 ${date}일 (${day})`;
         document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`;
 
-        // 요일별 공성전/무한대전 텍스트 로직
         const noticeEl = document.getElementById('daily-notice');
         const hrEl = document.getElementById('notice-hr');
         let noticeHtml = "";
 
-        if (dayOfWeek === 1) { // 월요일
+        if (dayOfWeek === 1) { 
             noticeHtml = "";
             hrEl.style.display = "none";
-        } else if (dayOfWeek >= 2 && dayOfWeek <= 5) { // 화 ~ 금요일
+        } else if (dayOfWeek >= 2 && dayOfWeek <= 5) { 
             const castles = ["", "", "졸본성 : 주작의성", "송원성 : 현무의성", "숙군성 : 청룡의성", "장훈성 : 백호의성"];
             const dayNames = ["", "", "화요일", "수요일", "목요일", "금요일"];
             noticeHtml = `<span class="highlight">${dayNames[dayOfWeek]} 21:00</span><br><strong>${castles[dayOfWeek]}</strong>`;
             hrEl.style.display = "block";
-        } else { // 토요일, 일요일 (0 또는 6)
+        } else { 
             noticeHtml = `<span class="highlight">토요일/일요일 21:00</span><br><strong>남북무한대전</strong><br><span class="sub-text">바람가족의축복 수령후 입장바람</span>`;
             hrEl.style.display = "block";
         }
 
-        // 내용이 다를 때만 업데이트하여 브라우저 부담을 줄임
         if (noticeEl.innerHTML !== noticeHtml) {
             noticeEl.innerHTML = noticeHtml;
         }
     }
     
-    // 1초마다 시계 갱신
     setInterval(updateClock, 1000);
-    updateClock(); // 페이지 로드 시 즉시 1회 실행
+    updateClock(); 
 
+    // ===== 공성 타이머 =====
+    function getNextEventTime() {
+        const now = new Date();
+        const next = new Date();
+        next.setHours(21, 0, 0, 0);
+
+        if (now.getHours() >= 21) {
+            next.setDate(next.getDate() + 1);
+        }
+        return next;
+    }
+
+    function updateEventTimer() {
+        const now = new Date();
+        const next = getNextEventTime();
+        const diff = next - now;
+
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+
+        const timerText = `다음 공성까지: ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        const el = document.getElementById('event-timer');
+        if (el) { el.innerText = timerText; }
+    }
+    setInterval(updateEventTimer, 1000);
+    updateEventTimer();
+
+    // ===== 가이드 데이터 (변형 최소화 유지) =====
     const level98Guide = `
         <h3>[1~98레벨] 사냥터 루트</h3>
         <h4>■ 영웅의길 (솔플)</h4>
@@ -598,12 +634,7 @@ oninput="searchGuide(this.value)">
         ]
     };
 
-    let historyStack = [];
-    const treeMenuEl = document.getElementById('tree-menu');
-    const questionEl = document.getElementById('question');
-    const contentEl = document.getElementById('content');
-    const navBtns = document.getElementById('nav-btns');
-
+    // ===== 트리 메뉴 빌드 =====
     function buildTree(node, container, prefix = "") {
         if (node.options) {
             node.options.forEach(opt => {
@@ -612,35 +643,50 @@ oninput="searchGuide(this.value)">
                 const a = document.createElement('a');
                 a.className = "tree-link";
                 a.innerText = prefix + opt.text;
-                a.onclick = () => { historyStack = [guideData]; render(opt.next || opt); };
+                
                 li.appendChild(a);
 
                 if (opt.next && opt.next.options) {
                     const subUl = document.createElement('ul');
                     subUl.className = "tree-sub";
+                    // 기본적으로는 CSS로 처리되지만, 필요시 JS 토글을 위해 스타일 추가
+                    subUl.style.display = 'block'; 
                     buildTree(opt.next, subUl, "");
                     li.appendChild(subUl);
+
+                    a.onclick = (e) => { 
+                        e.preventDefault();
+                        historyStack = [guideData]; 
+                        render(opt.next || opt); 
+                        // 클릭 시 하위 메뉴 토글 
+                        subUl.style.display = subUl.style.display === 'none' ? 'block' : 'none';
+                    };
+                } else {
+                    a.onclick = () => { 
+                        historyStack = [guideData]; 
+                        render(opt.next || opt); 
+                    };
                 }
                 container.appendChild(li);
             });
         }
     }
 
+    // ===== 화면 렌더링 =====
     function render(node, isBack = false) {
-       currentPage = node.title || node.text;
+        currentPage = node.title || node.text;
         if (!isBack) {
             historyStack.push(node);
         }
         
         contentEl.innerHTML = '';
         
-       if (node.result) {
-    questionEl.innerText = node.text || "가이드 결과"; 
-    contentEl.innerHTML = `
-        <button onclick="toggleFavorite()" style="margin-bottom:10px;">⭐ 즐겨찾기</button>
-        <div class="result">${node.result}</div>
-    `;
-}
+        if (node.result) {
+            questionEl.innerText = node.text || "가이드 결과"; 
+            contentEl.innerHTML = `
+                <button class="nav-btn fav-btn" onclick="toggleFavorite()">⭐ 즐겨찾기 저장 / 해제</button>
+                <div class="result">${node.result}</div>
+            `;
         } else {
             questionEl.innerText = node.title || "항목을 선택하세요";
             
@@ -678,87 +724,37 @@ oninput="searchGuide(this.value)">
         render(guideData);
     }
 
+    // ===== 검색 기능 =====
+    function searchGuide(keyword) {
+        const items = document.querySelectorAll('.tree-item');
+        items.forEach(el => {
+            const linkText = el.querySelector('.tree-link').innerText.toLowerCase();
+            if (linkText.includes(keyword.toLowerCase())) {
+                el.style.display = 'block';
+            } else {
+                el.style.display = 'none';
+            }
+        });
+    }
+
+    // ===== 즐겨찾기 =====
+    function toggleFavorite() {
+        if (!currentPage) return;
+        const idx = favorites.indexOf(currentPage);
+        if (idx > -1) {
+            favorites.splice(idx, 1);
+            alert(`[ ${currentPage} ] 즐겨찾기가 해제되었습니다.`);
+        } else {
+            favorites.push(currentPage);
+            alert(`[ ${currentPage} ] 즐겨찾기가 저장되었습니다.`);
+        }
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+
     // 초기 실행
     buildTree(guideData, treeMenuEl);
     render(guideData);
 </script>
 
 </body>
-    // ===== 검색 기능 =====
-function searchGuide(keyword) {
-    const items = document.querySelectorAll('.tree-link');
-    items.forEach(el => {
-        if (el.innerText.toLowerCase().includes(keyword.toLowerCase())) {
-            el.style.display = 'block';
-        } else {
-            el.style.display = 'none';
-        }
-    });
-}
-
-// ===== 트리 펼침/접힘 =====
-setTimeout(() => {
-    document.querySelectorAll('.tree-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            const sub = this.nextElementSibling;
-            if (sub && sub.classList.contains('tree-sub')) {
-                e.preventDefault();
-                sub.style.display = sub.style.display === 'none' ? 'block' : 'none';
-            }
-        });
-    });
-}, 100);
-
-// ===== 즐겨찾기 =====
-let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-let currentPage = null;
-
-function toggleFavorite() {
-    if (!currentPage) return;
-    const idx = favorites.indexOf(currentPage);
-    if (idx > -1) {
-        favorites.splice(idx, 1);
-    } else {
-        favorites.push(currentPage);
-    }
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    alert('즐겨찾기 저장됨');
-}
-
-// ===== 공성 타이머 =====
-function getNextEventTime() {
-    const now = new Date();
-    const next = new Date();
-    next.setHours(21, 0, 0, 0);
-
-    if (now.getHours() >= 21) {
-        next.setDate(next.getDate() + 1);
-    }
-    return next;
-}
-
-function updateEventTimer() {
-    const now = new Date();
-    const next = getNextEventTime();
-    const diff = next - now;
-
-    const h = Math.floor(diff / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-
-    const timerText = `다음 공성까지: ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-
-    let el = document.getElementById('event-timer');
-    if (!el) {
-        el = document.createElement('div');
-        el.id = 'event-timer';
-        el.style.marginTop = '5px';
-        el.style.fontSize = '0.75rem';
-        document.querySelector('.clock-widget').appendChild(el);
-    }
-    el.innerText = timerText;
-}
-
-setInterval(updateEventTimer, 1000);
-updateEventTimer();
 </html>

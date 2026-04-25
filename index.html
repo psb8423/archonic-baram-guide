@@ -102,12 +102,9 @@
     <div class="clock-widget">
         <div id="current-date">0000년 00월 00일 (요일)</div>
         <div id="current-time">00:00:00</div>
-        <hr>
-        <div class="notice-text">
-            <span class="highlight">토요일/일요일 21:00</span><br>
-            <strong>남북무한대전</strong><br>
-            <span class="sub-text">바람가족의축복 수령후 입장바람</span>
-        </div>
+        <hr id="notice-hr">
+        <div class="notice-text" id="daily-notice">
+            </div>
     </div>
 
     <div class="helpful-links">
@@ -134,14 +131,15 @@
 </main>
 
 <script>
-    // 시계 업데이트 기능
+    // 시계 및 요일별 안내문구 업데이트 기능
     function updateClock() {
         const now = new Date();
         const year = now.getFullYear();
         const month = now.getMonth() + 1;
         const date = now.getDate();
+        const dayOfWeek = now.getDay(); // 0:일, 1:월, 2:화, 3:수, 4:목, 5:금, 6:토
         const days = ['일', '월', '화', '수', '목', '금', '토'];
-        const day = days[now.getDay()];
+        const day = days[dayOfWeek];
         
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
@@ -149,7 +147,31 @@
         
         document.getElementById('current-date').innerText = `${year}년 ${month}월 ${date}일 (${day})`;
         document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`;
+
+        // 요일별 공성전/무한대전 텍스트 로직
+        const noticeEl = document.getElementById('daily-notice');
+        const hrEl = document.getElementById('notice-hr');
+        let noticeHtml = "";
+
+        if (dayOfWeek === 1) { // 월요일
+            noticeHtml = "";
+            hrEl.style.display = "none";
+        } else if (dayOfWeek >= 2 && dayOfWeek <= 5) { // 화 ~ 금요일
+            const castles = ["", "", "졸본성 : 주작의성", "송원성 : 현무의성", "숙군성 : 청룡의성", "장훈성 : 백호의성"];
+            const dayNames = ["", "", "화요일", "수요일", "목요일", "금요일"];
+            noticeHtml = `<span class="highlight">${dayNames[dayOfWeek]} 21:00</span><br><strong>${castles[dayOfWeek]}</strong>`;
+            hrEl.style.display = "block";
+        } else { // 토요일, 일요일 (0 또는 6)
+            noticeHtml = `<span class="highlight">토요일/일요일 21:00</span><br><strong>남북무한대전</strong><br><span class="sub-text">바람가족의축복 수령후 입장바람</span>`;
+            hrEl.style.display = "block";
+        }
+
+        // 내용이 다를 때만 업데이트하여 브라우저 부담을 줄임
+        if (noticeEl.innerHTML !== noticeHtml) {
+            noticeEl.innerHTML = noticeHtml;
+        }
     }
+    
     // 1초마다 시계 갱신
     setInterval(updateClock, 1000);
     updateClock(); // 페이지 로드 시 즉시 1회 실행
@@ -348,8 +370,8 @@
                                 <h3>[1, 2차 승급 가이드]</h3>
                                 <div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/영상주소' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div>
                                 <ul>
-                                    <li><strong>추천 승급 체력/마력:</strong> 1차승급 : 검객 체력7만 <br> 자객 체력6.5만 <br> 술사 체력3만, 마력2만 <br> 도인 체력2.5만, 마력2.5만 
-                                    <br> 2차승급 : 검제 체력30만 <br> 진검 체력 30만 <br> 현사 체력 15만 <br> 마력10만 <br> 명인 체력 8만, 7만 </li>
+                                    <li><strong>추천 승급 체력/마력:</strong> 1차승급 <br><br> 검객 체력7만 <br> 자객 체력6.5만 <br> 술사 체력3만, 마력2만 <br> 도인 체력2.5만, 마력2.5만 
+                                    <br> 2차승급 <br><br> 검제 체력30만 <br> 진검 체력 30만 <br> 현사 체력 15만 <br> 마력10만 <br> 명인 체력 8만, 7만 </li>
                                     <li><strong>필요 준비물:</strong> 1차승급 : 팔괘 + 경험치 5천만 <br> 2차승급 : 수룡, 화룡의 비능.</li>
                                 </ul>
                                 <div class='tip-box'><strong>💡 팁:</strong> 팔괘는 쥐, 토끼, 닭, 뱀, 돼지, 소, 원숭이, 호랑이왕(천상계제이계)굴에서 획득. <br>용의비늘은 천상계제이계 다음방인 수화룡의 방에서 나오는 용의 비늘을 국내성 갑옷점에서 교환하여 획득. <br>(수룡 7%, 화룡 3% 정도라고 함)<br>1차는 대부분 칼승. 2차는 격수 풀승, 비격수 칼승.</div>

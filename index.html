@@ -435,16 +435,16 @@
                 }
             },
             {
-                text: "4. 자본별 파밍",
+                text: "4. 파밍 사냥터",
                 result: `
-                    <h3>[자본별 추천 파밍 루트]</h3>
+                    <h3>[레벨별 추천 파밍 루트]</h3>
                     <p>내용에 맞는 사진 두 장을 아래에 배치했습니다.</p>
                     <a href='hunt pre 1.png' target='_blank' title='클릭해서 확대 보기'><img src='hunt pre 1.png' class='zoom-img'></a>
                     <a href='hunt pre 2.png' target='_blank' title='클릭해서 확대 보기'><img src='hunt pre 2.png' class='zoom-img'></a>
                     <ul>
-                        <li><strong>무자본:</strong> 쥐굴/뱀굴 고기 파밍 → 돼지굴 노가다 → 흉가 호박 파밍</li>
-                        <li><strong>중자본:</strong> 깹무기 조합 노가다 → 용궁 장군굴 심장 파밍 → 북방 대초원</li>
-                        <li><strong>고자본:</strong> 북방 고층 재료 파밍 → 레이드 보스 직할 → 흉노족 금전 파밍</li>
+                        <li><strong>레벨 99 내외:</strong> 돼지굴 노가다 → 흉가 호박 파밍 → 쇠조각 파밍</li>
+                        <li><strong>1차승급~2차승급:</strong> 북방 대초원 20층 (독, 쇠조각, 장인의돌), 불의수정(문위의방, 문려드랍), (도사)흉가 노노</li>
+                        <li><strong>3차승급~4차승급:</strong> 보스레이드(격도술 기준 추천승급 : 백호왕 3차승급, 해골왕 4차승급, 용왕용마 4차승급 이상</li>
                     </ul>
                     <div class='tip-box'>※ 본인의 장비 수준과 직업에 맞는 사냥터를 선택하는 것이 가장 효율적입니다.</div>
                 `
@@ -599,7 +599,7 @@
                                 <h3>[용궁 메인퀘스트]</h3>
                                 <div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/DfXb7wTc2AY' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div>
                                 <ul>
-                                    <li><strong>시작 조건:</strong> 내용을 적어주세요.</li>
+                                    <li><strong>시작 조건:</strong> 50레벨부터 가능. 해파리장군은 1차승급 이후, 청의태자는 2차승급 이후 퀘스트 받을수 있음.</li>
                                     <li><strong>퀘스트 순서:</strong> 복어장군-게장군-문어장군-해마장군-인어장군-상어장군-해파리장군-청의태자.</li>
                                 </ul>
                                 <a href='rgu main 1.png' target='_blank' title='클릭해서 확대 보기'><img src='rgu main 1.png' class='zoom-img'></a>
@@ -620,7 +620,7 @@
                                 <h4>■ 인어반지</h4>
                                 <ul>
                                     <li><strong>필요 재료:</strong> 문어다리, 게집게, 게등껍질, 해마꼬리.</li>
-                                    <li><strong>진행 방법:</strong> 내용을 적어주세요.</li>
+                                    <li><strong>진행 방법:</strong> 반복가능 퀘스트. 인어반지의 내구도가 10만이라 낮은 편이기 때문에 인기가 떨어진편.</li>
                                 </ul>
                                 <a href='rgu inban.png' target='_blank' title='클릭해서 확대 보기'><img src='rgu inban.png' class='zoom-img'></a>
                                 <hr>
@@ -647,7 +647,7 @@
                                 <a href='rgu jungbang.png' target='_blank' title='클릭해서 확대 보기'><img src='rgu jungbang.png' class='zoom-img'></a>
                                 <ul>
                                     <li><strong>필요 재료:</strong> 홍옥3개, 숯의 정화 3개(불의수정2+참나무조각 30% 성공확률).</li>
-                                    <li><strong>진행 방법:</strong> 내용을 적어주세요.</li>
+                                    <li><strong>진행 방법:</strong> 그림 참고.</li>
                                 </ul>
                             `
                         },
@@ -660,7 +660,7 @@
                                     <li><strong>필요 재료:</strong> 산삼, 게등껍질, 게집게, 문어다리, 해마꼬리, 
                                     <br>복어의심장30개, 문어의심장30개, 해마의심장 30개, 인어의심장 30개, 상어의심장 30개
                                     <br>상어의핵 3개, 불의수정3개.</li>
-                                    <li><strong>진행 방법:</strong> 내용을 적어주세요.</li>
+                                    <li><strong>진행 방법:</strong> 메인 퀘스트 중 상어장군까지 클리어시 시작가능.</li>
                                 </ul>
                             `
                         },
@@ -688,8 +688,9 @@
                             result: `
                                 <h3>[중국 북부 퀘스트]</h3>
                                 <ul>
-                                    <li><strong>만리장성 수리:</strong> 벽돌을 가져다주어 보상 획득</li>
-                                    <li><strong>천구/선묘 퀘스트:</strong> 특정 몬스터 퇴치 및 아이템 수집</li>
+                                    <li><strong>만리장성 수리(미구현):</strong> 벽돌을 가져다주어 보상 획득</li>
+                                    <li><strong>후말살:</strong> 보상 : 강철투구(내구도 30% 보호 기능)</li>
+                                    <li><strong>진황보검을 찾아서:</strong> 보상 : 강철손목보호대(내구도 15% 보호 기능)</li>
                                 </ul>
                                 <div class='tip-box'>중국 북부는 지형이 넓으므로 이동 수단을 미리 확보하는 것이 좋습니다.</div>
                             `
@@ -699,8 +700,8 @@
                             result: `
                                 <h3>[중국 남부 퀘스트]</h3>
                                 <ul>
-                                    <li><strong>낙양성/광동성 퀘스트:</strong> 남부 지역의 주요 NPC들과 대화하여 진행</li>
-                                    <li><strong>신수 관련 퀘스트:</strong> 특정 레벨 이상 진행 가능한 중급 퀘스트</li>
+                                    <li><strong>봉마병 퀘스트:</strong> 선행 : 진황보검을 찾아서, 금편의 목걸이보</li>
+                                    <li><strong>파마의 피리:</strong> 보상 : 마반</li>
                                 </ul>
                             `
                         },
@@ -709,10 +710,19 @@
                             result: `
                                 <h3>[도삭산 퀘스트]</h3>
                                 <ul>
-                                    <li><strong>100층~1000층 상점 퀘스트:</strong> 각 층의 NPC가 요구하는 물건을 가져다주고 보상 획득</li>
-                                    <li><strong>핵심 보상:</strong> 투구 방어구 및 각종 소비 아이템</li>
+                                    <li><strong>100층 퀘스트:</strong> 보상 : 강철의 구두</li>
+                                    <li><strong>200층 퀘스트:</strong> 보상 : 봉마의 목걸</li>
+                                    <li><strong>300층 퀘스트:</strong> 보상 : 다양함(동인각, 은인각, 봉마의목걸이, 등)</li>
+                                    <li><strong>400층 퀘스트:</strong> 보상 : 도삭산의 황금봉(1000층 입장재료)</li>
+                                    <li><strong>500층 퀘스트:</strong> 보상 : 수정의 귀걸이</li>
+                                    <li><strong>600층 퀘스트:</strong> 보상 : 수정 해골(1000층 입장재료)</li>
+                                    <li><strong>700층 퀘스트:</strong> 보상 : 진비투구, 경비투구, 법비모, 격비모(업그레이드 가능, 업그레이드 미구현)</li>
+                                    <li><strong>800층 퀘스트:</strong> 보상 : 산신의 옷</li>
+                                    <li><strong>900층 퀘스트:</strong> 보상 : 도삭산의 서(1000층 입장재료) </li>
+                                    <li><strong>1000층 퀘스트:</strong> 보상 : 1000층 상점 입장(캐릭당 1회만 가능)</li>
+                                    <li><strong>핵심 보상:</strong> 1000층 상점 입장 : 보무의목걸이, 시력회복의귀걸이, 투명구두 구입가능</li>
                                 </ul>
-                                <div class='tip-box'>도삭산은 층별로 난이도가 급격히 상승하므로 본인의 레벨에 맞는 층에서 진행하세요.</div>
+                                <div class='tip-box'>도삭산은 층별로 난이도가 급격히 상승하므로 본인의 레벨에 맞는 층에서 진행하세요. <br> 800층 : 2차승급부터 입장가능 <br> 900층 : 4차승급부터 입장가능 </div>
                             `
                         }
                     ]
@@ -738,8 +748,9 @@
                             result: `
                                 <h3>[환상의섬 아이템 제작]</h3>
                                 <ul>
-                                    <li><strong>진'수정의검:</strong> 수정의검 + 영웅의이슬 등</li>
-                                    <li><strong>청의기창:</strong> 환상의섬 보스 재료를 이용한 강력한 무기</li>
+                                    <li><strong>저주의 단검:</strong> 타격시 일정확률로 저주격 </li>
+                                    <li><strong>거미독칭:</strong> 타격시 일정확률로 중독격 </li>
+                                    <li><strong>주술방어구류:</strong> 문신방어구를 구입후 업그레이드 </li>
                                 </ul>
                             `
                         },
@@ -748,8 +759,14 @@
                             result: `
                                 <h3>[환상의섬 메인/서브 퀘스트]</h3>
                                 <ul>
-                                    <li><strong>명수사관 퀘스트:</strong> 섬의 미스터리를 풀고 보상 획득</li>
-                                    <li><strong>10만전 퀘스트:</strong> 초반 금전 수급의 필수 코스</li>
+                                    <li><strong>명수사관 퀘스트(10만전 퀘스트):</strong> 섬의 미스터리를 풀고 보상 획득</li>
+                                    <li><strong>요술놀이구슬:</strong> 조합비 10만전, 15만전에 판매가 </li>
+                                    <li><strong>진'고균의 영검 퀘스트:</strong> 화화의 미소 </li>
+                                    <li><strong>등대빛의 검 퀘스트:</strong> 선장의 일기 모으기 </li>
+                                    <li><strong>문화재보호 퀘스트:</strong> 토템을 가져다줘서 보상획득. 반룡곤(10개), 가시나무봉(15개) </li>
+                                    <li><strong>영웅의무기 퀘스트:</strong> 1차 : 향료, 늑대의송곳니100개, 거미의이빨100개 <br>
+                                    2차 : 작은 영웅상, 정령의결정(해적선장의망령 드랍), 토템 5개(직업별로 다름. 전사 : 대지, 도적 : 번개, 주술사 : 화염, 도사 : 바람), 1차무기</li>
+                                    <li><strong>정령의옷 퀘스트:</strong> 4종토템 3개씩, 여신의눈물(폭염도 북쪽 돌아다니면 이슬획득), 자연의인장 상, 하(폭염왕) 조합 </li>
                                 </ul>
                             `
                         }

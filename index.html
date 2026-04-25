@@ -8,11 +8,18 @@
         :root { --primary-color: #007bff; --bg-color: #f0f2f5; }
         body { font-family: 'Apple SD Gothic Neo', sans-serif; background-color: var(--bg-color); display: flex; margin: 0; min-height: 100vh; }
         
-        /* 1시 방향 워터마크 (유튜브 프로필 + 글씨) */
-        .watermark { position: fixed; top: 15px; right: 15px; z-index: 1000; transition: transform 0.3s; display: flex; flex-direction: column; align-items: center; text-decoration: none; gap: 6px; }
+        /* 1시 방향 워터마크 & 링크 컨테이너 */
+        .watermark-container { position: fixed; top: 15px; right: 15px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+        
+        .watermark { transition: transform 0.3s; display: flex; flex-direction: column; align-items: center; text-decoration: none; gap: 6px; }
         .watermark img { width: 60px; height: 60px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 3px solid #fff; object-fit: cover; }
         .watermark .badge { background: #ff0000; color: white; padding: 4px 12px; border-radius: 15px; font-size: 0.75rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .watermark:hover { transform: scale(1.05); }
+
+        .helpful-links { background: rgba(255, 255, 255, 0.95); padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); text-align: left; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; border: 1px solid #ddd; }
+        .helpful-links .link-title { font-weight: bold; color: #333; margin-bottom: 2px; border-bottom: 1px solid #ccc; padding-bottom: 4px; text-align: center; }
+        .helpful-links a { color: #007bff; text-decoration: none; font-weight: bold; transition: 0.2s; }
+        .helpful-links a:hover { color: #0056b3; text-decoration: underline; }
 
         /* 좌측 트리 목차 */
         #sidebar { width: 280px; background: #343a40; color: #fff; padding: 20px; overflow-y: auto; height: 100vh; position: sticky; top: 0; flex-shrink: 0; text-align: left; }
@@ -35,7 +42,7 @@
         .result { background: #e9ecef; padding: 20px; border-radius: 10px; line-height: 1.6; text-align: left; font-size: 0.95rem; }
         .result h3 { margin-top: 0; color: #d32f2f; border-bottom: 2px solid #d32f2f; padding-bottom: 5px; }
         .result h4 { color: #0056b3; margin-top: 20px; margin-bottom: 10px; }
-        .result ul { padding-left: 20px; margin-bottom: 15px; }
+        .result ul, .result ol { padding-left: 20px; margin-bottom: 15px; }
         .result li { margin-bottom: 8px; line-height: 1.5; }
         .result hr { border: 0; height: 1px; background: #ccc; margin: 25px 0; }
         
@@ -58,16 +65,23 @@
             body { flex-direction: column; }
             #sidebar { width: 100%; height: auto; position: relative; padding: 15px; box-sizing: border-box; }
             #main-container { padding: 20px 10px; }
-            .watermark { top: auto; bottom: 15px; right: 15px; }
+            .watermark-container { top: auto; bottom: 15px; right: 15px; align-items: flex-end; }
         }
     </style>
 </head>
 <body>
 
-<a href="https://www.youtube.com/@archonic00" target="_blank" class="watermark" title="아카닉 유튜브로 이동">
-    <img src="profil.png" alt="아카닉 유튜브">
-    <span class="badge">아카닉 유튜브</span>
-</a>
+<div class="watermark-container">
+    <a href="https://www.youtube.com/@archonic00" target="_blank" class="watermark" title="아카닉 유튜브로 이동">
+        <img src="profil.png" alt="아카닉 유튜브">
+        <span class="badge">아카닉 유튜브</span>
+    </a>
+    <div class="helpful-links">
+        <div class="link-title">도움이 되는 사이트</div>
+        <a href="https://oldbaramtools.com/" target="_blank">1) 옛바도구</a>
+        <a href="https://arca.live/b/baramclassic" target="_blank">2) 옛날바람채널</a>
+    </div>
+</div>
 
 <nav id="sidebar">
     <h2>목차 바로가기</h2>
@@ -118,7 +132,20 @@
         title: "아카닉 옛날바람 가이드",
         options: [
             {
-                text: "1. 사냥터",
+                text: "1. 단축키 및 부여성지도",
+                result: `
+                    <h3>[단축키 및 부여성지도]</h3>
+                    <h4>■ 주요 단축키</h4>
+                    <ul>
+                        <li><strong>단축키 내용:</strong> 내용을 적어주세요.</li>
+                    </ul>
+                    <hr>
+                    <h4>■ 부여성 지도</h4>
+                    <a href='buyeo_map.png' target='_blank' title='클릭해서 확대 보기'><img src='buyeo_map.png' class='zoom-img'></a>
+                `
+            },
+            {
+                text: "2. 사냥터",
                 next: {
                     title: "직업을 선택하세요",
                     options: [
@@ -182,7 +209,7 @@
                 }
             },
             {
-                text: "2. 아이템",
+                text: "3. 아이템",
                 next: {
                     title: "아이템 세팅 종류를 선택하세요",
                     options: [
@@ -257,46 +284,54 @@
                 }
             },
             {
-                text: "3. 동귀어진 문파소개",
-                result: `
-                    <h3>[★동귀어진★ 문파소개]</h3>
-                    <h4>■ 사냥 / 친목 문파 ★동귀어진★ 에서 신규 문원을 모십니다.</h4>
-                    <ul>
-                        <li><strong>가입 조건:</strong> 2차 승급 이상 우대 / 99렙은 성장 의지 있으면 환영</li>
-                        <li><strong>디스코드:</strong> 활발 (평균 참여자 10+@. 청취만 가능해도 OK.)</li>
-                        <li><strong>문파 규칙:</strong> 문파 파티·정보 공유 활발. 사냥/레이드 기본 매너 갖춘 분만 가능하며 비매너, 여미새, 철새 및 문파원에게 과도한 요구하시는 분은 컷!</li>
-                    </ul>
-                    <hr>
-                    <h4>■ 문파 특징</h4>
-                    <ul>
-                        <li>사냥 / 친목 중심</li>
-                        <li>사냥 꿀팁 공유</li>
-                        <li>승급 / 퀘스트 모집 및 지원</li>
-                        <li>즐겁게 오래 게임하는 분위기</li>
-                        <li><strong>어느 연합에도 속해있지 않은! 공성 자율 참여!</strong></li>
-                        <li>활발히 활동하실 분 대환영!!</li>
-                    </ul>
-                    <div class='tip-box'>
-                        아무나 받지 않습니다.<br>
-                        함께 성장하고 소통할 사람만 모여주시면 좋겠습니다.<br>
-                        <strong>비매너 유저는 정중히 사절합니다.</strong>
-                    </div>
-                    <hr>
-                    <h4>■ 가입 문의</h4>
-                    <ul>
-                        <li><strong>인게임 문의:</strong> 오시멘, 갈리오, 앤써니, 체력회복, 성두</li>
-                        <li><strong>카카오톡 문의:</strong> <a href="https://open.kakao.com/o/gf20biNh" target="_blank" style="color: #007bff; text-decoration: underline; font-weight: bold;">오픈채팅방 바로가기</a></li>
-                    </ul>
-                    <div class='tip-box'>
-                        <strong>[ 간부진 안내 ]</strong><br><br>
-                        👑 <strong>문주:</strong> 오시멘<br>
-                        🛡️ <strong>부문주:</strong> 갈리오, 앤써니, 체력회복, 성두<br>
-                        🤝 <strong>동맹문파:</strong> 만두단
-                    </div>
-                `
+                text: "4. 승급가이드",
+                next: {
+                    title: "승급 단계를 선택하세요",
+                    options: [
+                        {
+                            text: "1) 1, 2차 승급",
+                            result: `
+                                <h3>[1, 2차 승급 가이드]</h3>
+                                <div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/영상주소' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div>
+                                <ul>
+                                    <li><strong>추천 승급 체력/마력:</strong> 1차승급 : 검객 체력7만 <br> 자객 체력6.5만 <br> 술사 체력3만, 마력2만 <br> 도인 체력2.5만, 마력2.5만 
+                                    <br> 2차승급 : 검제 체력30만 <br> 진검 체력 30만 <br> 현사 체력 15만 <br> 마력10만 <br> 명인 체력 8만, 7만 </li>
+                                    <li><strong>필요 준비물:</strong> 1차승급 : 팔괘 + 경험치 5천만 <br> 2차승급 : 수룡, 화룡의 비능.</li>
+                                </ul>
+                                <div class='tip-box'><strong>💡 팁:</strong> 팔괘는 쥐, 토끼, 닭, 뱀, 돼지, 소, 원숭이, 호랑이왕(천상계제이계)굴에서 획득. <br>용의비늘은 천상계제이계 다음방인 수화룡의 방에서 나오는 용의 비늘을 국내성 갑옷점에서 교환하여 획득. <br>(수룡 7%, 화룡 3% 정도라고 함)<br>1차는 대부분 칼승. 2차는 격수 풀승, 비격수 칼승.</div>
+                            `
+                        },
+                        {
+                            text: "2) 3차 승급",
+                            result: `
+                                <h3>[3차 승급 가이드]</h3>
+                                <div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/sG1J3TKgHpk' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div>
+                                <ul>
+                                    <li><strong>추천 승급 체력/마력:</strong> 검황 100만~120만<br> 귀검 120만<br> 현인 체30만 마50만<br> 도사 체25~60만 마70만(거의 풀승, 일찍 승급시 파력무참진 사용 가능이지만 마력낮은 도사는 선호도가 떨어지기 때문).</li>
+                                    <li><strong>필요 준비물:</strong> 내용을 적어주세요.</li>
+                                    <li><strong>보스 잡는 순서:</strong> 운랑, 수렴귀 - 폭염귀, 풍석 - 암흑왕.</li>
+                                </ul>
+                                <div class='tip-box'><strong>💡 팁:</strong> 암흑왕의방에서 6시 방향으로 가면 나가질수 있으니 조심, 입구에 있는 돌은 입장 직전에 부수기.</div>
+                            `
+                        },
+                        {
+                            text: "3) 4차 승급",
+                            result: `
+                                <h3>[4차 승급 가이드]</h3>
+                                <div class='video-box'><iframe width='100%' height='250' src='https://www.youtube.com/embed/HZclfud5UkI' frameborder='0' allowfullscreen referrerpolicy='strict-origin-when-cross-origin'></iframe></div>
+                                <ul>
+                                    <li><strong>추천 승급 체력/마력:</strong> 모든 직업 칼승. <br> 격수 체력 140만 <br> 주술사 체력 65만, 마력 90만 <br> 도사 체력 60만, 마력 75만 .</li>
+                                    <li><strong>필요 준비물:</strong> 장안성비서 여러장, 국내성비서 2장, 부여성비서 1장, 일본행 배 승선권 .</li>
+                                    <li><strong>보스 잡는 순서:</strong> 소호(소림사 가는길 동쪽), 전욱(국내성 1시방향), 제곡(부여성 1), 요제(일본 1시), 순제(광동성 7시), 반고(광동성 7시).</li>
+                                </ul>
+                                <div class='tip-box'><strong>💡 팁:</strong> 백호의 희원'첨은 파티구성원중 아래에 있을수록 힐량이 많으니 격수를 마지막에 초대..</div>
+                            `
+                        }
+                    ]
+                }
             },
             {
-                text: "4. 레이드 보스공략",
+                text: "5. 레이드 보스공략",
                 next: {
                     title: "레이드 보스를 선택하세요",
                     options: [
@@ -315,7 +350,7 @@
                                     <a href='Tking 6.png' target='_blank' title='클릭해서 확대 보기'><img src='Tking 6.png' class='zoom-img'></a></li>
                                     <li><strong>드랍 아이템:</strong> 수정, 크리스탈, 진아광검, 진꼬마별봉, 꼬마별봉, 연노랑웨딩드레스, 연노랑망또.</li>
                                 </ul>
-                                <div class='tip-box'><strong>💡 주의사항:</strong> 주의사항을 적어주세요.</div>
+                                <div class='tip-box'><strong>💡 주의사항:</strong> 크르르르르릉.... 의 범위가 넗으니 주의. <br> 크르릉은 백호왕의 오른손, 왼손, 정면공격.</div>
                             `
                         },
                         {
@@ -333,7 +368,7 @@
                                     </li>
                                     <li><strong>드랍 아이템:</strong> 불의수정, 유성지의보패, 해골왕의뼈.</li>
                                 </ul>
-                                <div class='tip-box'><strong>💡 주의사항:</strong> 주의사항을 적어주세요.</div>
+                                <div class='tip-box'><strong>💡 주의사항:</strong> 받아라와 나약한 녀석은 피하는 방향이 반대. 헷갈리기 쉬우니 주의.</div>
                             `
                         },
                         {
@@ -346,14 +381,14 @@
                                     <li><strong>공략 내용:</strong> </li>
                                     <li><strong>드랍 아이템:</strong> 묵, 감, 흑. 진룡의 어금니, 용무기 1검류.</li>
                                 </ul>
-                                <div class='tip-box'><strong>💡 주의사항:</strong> 주의사항을 적어주세요.</div>
+                                <div class='tip-box'><strong>💡 주의사항:</strong> 화염주 후 5x5 공격이 너프 후 3x3으로 범위가 변경됨.</div>
                             `
                         }
                     ]
                 }
             },
             {
-                text: "5. 용궁가이드",
+                text: "6. 용궁가이드",
                 next: {
                     title: "용궁 가이드 항목을 선택하세요",
                     options: [
@@ -381,10 +416,26 @@
                             text: "2) 인어반지, 주홍투구",
                             result: `
                                 <h3>[인어반지, 주홍투구 획득법]</h3>
-                                <a href='rgu inban.png' target='_blank' title='클릭해서 확대 보기'><img src='rgu inban.png' class='zoom-img'></a>
+                                <h4>■ 인어반지</h4>
                                 <ul>
                                     <li><strong>필요 재료:</strong> 문어다리, 게집게, 게등껍질, 해마꼬리.</li>
                                     <li><strong>진행 방법:</strong> 내용을 적어주세요.</li>
+                                </ul>
+                                <a href='rgu inban.png' target='_blank' title='클릭해서 확대 보기'><img src='rgu inban.png' class='zoom-img'></a>
+                                <hr>
+                                <h4>■ 주홍투구</h4>
+                                <ul>
+                                    <li><strong>준비물:</strong> 뇌진도 (두고개 드랍)</li>
+                                    <li><strong>진행 방법:</strong>
+                                        <ol>
+                                            <li>거북장군에게 퀘스트 수령</li>
+                                            <li>국내/부여장터(11시 방향)의 장돌뱅이와 대화 (별주부전)</li>
+                                            <li>12지신 - 동쪽 - 두고개에서 뇌진도 획득 후 장돌뱅이와 대화</li>
+                                            <li>12지신 - 동쪽 - 한고개에서 토깽이를 잡아 토끼의 간 획득 (놓아주지 않는다 선택)</li>
+                                            <li>거북장군과 대화 후 퀘스트 완료</li>
+                                        </ol>
+                                    </li>
+                                    <li><strong>아이템 능력치:</strong> 레벨 30이상, 무장-9, 내구 10만, 수리x<br>체마 500, 힘 3, 민지 2, 마방 1, 재생 2, Hit 3, Dam 3</li>
                                 </ul>
                             `
                         },
@@ -425,6 +476,45 @@
                         }
                     ]
                 }
+            },
+            {
+                text: "7. 동귀어진 문파소개",
+                result: `
+                    <h3>[★동귀어진★ 문파소개]</h3>
+                    <h4>■ 사냥 / 친목 문파 ★동귀어진★ 에서 신규 문원을 모십니다.</h4>
+                    <ul>
+                        <li><strong>가입 조건:</strong> 2차 승급 이상 우대 / 99렙은 성장 의지 있으면 환영</li>
+                        <li><strong>디스코드:</strong> 활발 (평균 참여자 10+@. 청취만 가능해도 OK.)</li>
+                        <li><strong>문파 규칙:</strong> 문파 파티·정보 공유 활발. 사냥/레이드 기본 매너 갖춘 분만 가능하며 비매너, 여미새, 철새 및 문파원에게 과도한 요구하시는 분은 컷!</li>
+                    </ul>
+                    <hr>
+                    <h4>■ 문파 특징</h4>
+                    <ul>
+                        <li>사냥 / 친목 중심</li>
+                        <li>사냥 꿀팁 공유</li>
+                        <li>승급 / 퀘스트 모집 및 지원</li>
+                        <li>즐겁게 오래 게임하는 분위기</li>
+                        <li><strong>어느 연합에도 속해있지 않은! 공성 자율 참여!</strong></li>
+                        <li>활발히 활동하실 분 대환영!!</li>
+                    </ul>
+                    <div class='tip-box'>
+                        아무나 받지 않습니다.<br>
+                        함께 성장하고 소통할 사람만 모여주시면 좋겠습니다.<br>
+                        <strong>비매너 유저는 정중히 사절합니다.</strong>
+                    </div>
+                    <hr>
+                    <h4>■ 가입 문의</h4>
+                    <ul>
+                        <li><strong>인게임 문의:</strong> 오시멘, 갈리오, 앤써니, 체력회복, 성두</li>
+                        <li><strong>카카오톡 문의:</strong> <a href="https://open.kakao.com/o/gf20biNh" target="_blank" style="color: #007bff; text-decoration: underline; font-weight: bold;">오픈채팅방 바로가기</a></li>
+                    </ul>
+                    <div class='tip-box'>
+                        <strong>[ 간부진 안내 ]</strong><br><br>
+                        👑 <strong>문주:</strong> 오시멘<br>
+                        🛡️ <strong>부문주:</strong> 갈리오, 앤써니, 체력회복, 성두<br>
+                        🤝 <strong>동맹문파:</strong> 만두단
+                    </div>
+                `
             }
         ]
     };

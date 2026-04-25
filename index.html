@@ -9,7 +9,8 @@
         body { font-family: 'Apple SD Gothic Neo', sans-serif; background-color: var(--bg-color); display: flex; margin: 0; min-height: 100vh; }
         
         /* 1시 방향 워터마크 & 링크, 시계 컨테이너 */
-        .watermark-container { position: fixed; top: 15px; right: 15px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; width: 200px; }
+        /* 너비를 200px에서 175px로 줄여 불필요한 여백 컷팅 */
+        .watermark-container { position: fixed; top: 15px; right: 15px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; width: 175px; }
         
         .watermark { transition: transform 0.3s; display: flex; flex-direction: column; align-items: center; text-decoration: none; gap: 6px; }
         .watermark img { width: 60px; height: 60px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 3px solid #fff; object-fit: cover; }
@@ -22,14 +23,24 @@
         .helpful-links a { color: #007bff; text-decoration: none; font-weight: bold; transition: 0.2s; }
         .helpful-links a:hover { color: #0056b3; text-decoration: underline; }
 
-        /* 디지털 시계 및 안내문 스타일 */
-        .clock-widget { background: rgba(255, 255, 255, 0.95); padding: 12px 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); text-align: center; border: 1px solid #ddd; width: 100%; box-sizing: border-box; }
-        #current-date { font-size: 0.8rem; color: #666; font-weight: bold; margin-bottom: 2px; }
-        #current-time { font-size: 1.4rem; font-weight: bold; color: #222; letter-spacing: 1px; font-family: monospace; }
-        .clock-widget hr { border: 0; height: 1px; background: #ccc; margin: 8px 0; }
-        .notice-text { font-size: 0.8rem; line-height: 1.4; }
-        .notice-text .highlight { color: #d32f2f; font-weight: bold; }
-        .notice-text .sub-text { font-size: 0.75rem; color: #555; margin-top: 3px; display: block; font-weight: bold; }
+        /* 디지털 시계 및 안내문 스타일 (디자인 변경) */
+        .clock-widget { 
+            background: linear-gradient(135deg, #87CEEB 0%, #192f6a 100%); /* 하늘색~남색 그라데이션 */
+            padding: 10px 10px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+            text-align: center; 
+            width: 100%; 
+            box-sizing: border-box; 
+            color: #ffffff; /* 기본 글자색 흰색 */
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        #current-date { font-size: 0.75rem; color: #e0f7fa; font-weight: bold; margin-bottom: 4px; }
+        #current-time { font-size: 1.3rem; font-weight: bold; color: #ffffff; letter-spacing: 0.5px; font-family: monospace; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+        .clock-widget hr { border: 0; height: 1px; background: rgba(255, 255, 255, 0.3); margin: 8px 0; }
+        .notice-text { font-size: 0.75rem; line-height: 1.4; color: #f8f9fa; }
+        .notice-text .highlight { color: #ffeb3b; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); } /* 대비를 위해 붉은색 대신 밝은 노란색 사용 */
+        .notice-text .sub-text { font-size: 0.7rem; color: #cfd8dc; margin-top: 3px; display: block; font-weight: bold; }
 
         /* 좌측 트리 목차 */
         #sidebar { width: 280px; background: #343a40; color: #fff; padding: 20px; overflow-y: auto; height: 100vh; position: sticky; top: 0; flex-shrink: 0; text-align: left; }
@@ -75,7 +86,8 @@
             body { flex-direction: column; }
             #sidebar { width: 100%; height: auto; position: relative; padding: 15px; box-sizing: border-box; }
             #main-container { padding: 20px 10px; }
-            .watermark-container { top: auto; bottom: 15px; right: 15px; align-items: flex-end; width: 180px; }
+            /* 모바일에서도 위젯 너비 최적화 */
+            .watermark-container { top: auto; bottom: 15px; right: 15px; align-items: flex-end; width: 175px; }
         }
     </style>
 </head>

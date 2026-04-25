@@ -8,18 +8,28 @@
         :root { --primary-color: #007bff; --bg-color: #f0f2f5; }
         body { font-family: 'Apple SD Gothic Neo', sans-serif; background-color: var(--bg-color); display: flex; margin: 0; min-height: 100vh; }
         
-        /* 1시 방향 워터마크 & 링크 컨테이너 */
-        .watermark-container { position: fixed; top: 15px; right: 15px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+        /* 1시 방향 워터마크 & 링크, 시계 컨테이너 */
+        .watermark-container { position: fixed; top: 15px; right: 15px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; width: 200px; }
         
         .watermark { transition: transform 0.3s; display: flex; flex-direction: column; align-items: center; text-decoration: none; gap: 6px; }
         .watermark img { width: 60px; height: 60px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 3px solid #fff; object-fit: cover; }
         .watermark .badge { background: #ff0000; color: white; padding: 4px 12px; border-radius: 15px; font-size: 0.75rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .watermark:hover { transform: scale(1.05); }
 
-        .helpful-links { background: rgba(255, 255, 255, 0.95); padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); text-align: left; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; border: 1px solid #ddd; }
+        /* 도움되는 사이트 스타일 */
+        .helpful-links { background: rgba(255, 255, 255, 0.95); padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); text-align: left; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; border: 1px solid #ddd; width: 100%; box-sizing: border-box; }
         .helpful-links .link-title { font-weight: bold; color: #333; margin-bottom: 2px; border-bottom: 1px solid #ccc; padding-bottom: 4px; text-align: center; }
         .helpful-links a { color: #007bff; text-decoration: none; font-weight: bold; transition: 0.2s; }
         .helpful-links a:hover { color: #0056b3; text-decoration: underline; }
+
+        /* 디지털 시계 및 안내문 스타일 */
+        .clock-widget { background: rgba(255, 255, 255, 0.95); padding: 12px 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); text-align: center; border: 1px solid #ddd; width: 100%; box-sizing: border-box; }
+        #current-date { font-size: 0.8rem; color: #666; font-weight: bold; margin-bottom: 2px; }
+        #current-time { font-size: 1.4rem; font-weight: bold; color: #222; letter-spacing: 1px; font-family: monospace; }
+        .clock-widget hr { border: 0; height: 1px; background: #ccc; margin: 8px 0; }
+        .notice-text { font-size: 0.8rem; line-height: 1.4; }
+        .notice-text .highlight { color: #d32f2f; font-weight: bold; }
+        .notice-text .sub-text { font-size: 0.75rem; color: #555; margin-top: 3px; display: block; font-weight: bold; }
 
         /* 좌측 트리 목차 */
         #sidebar { width: 280px; background: #343a40; color: #fff; padding: 20px; overflow-y: auto; height: 100vh; position: sticky; top: 0; flex-shrink: 0; text-align: left; }
@@ -65,7 +75,7 @@
             body { flex-direction: column; }
             #sidebar { width: 100%; height: auto; position: relative; padding: 15px; box-sizing: border-box; }
             #main-container { padding: 20px 10px; }
-            .watermark-container { top: auto; bottom: 15px; right: 15px; align-items: flex-end; }
+            .watermark-container { top: auto; bottom: 15px; right: 15px; align-items: flex-end; width: 180px; }
         }
     </style>
 </head>
@@ -76,6 +86,18 @@
         <img src="profil.png" alt="아카닉 유튜브">
         <span class="badge">아카닉 유튜브</span>
     </a>
+    
+    <div class="clock-widget">
+        <div id="current-date">0000년 00월 00일 (요일)</div>
+        <div id="current-time">00:00:00</div>
+        <hr>
+        <div class="notice-text">
+            <span class="highlight">토요일/일요일 21:00</span><br>
+            <strong>남북무한대전</strong><br>
+            <span class="sub-text">바람가족의축복 수령후 입장바람</span>
+        </div>
+    </div>
+
     <div class="helpful-links">
         <div class="link-title">도움이 되는 사이트</div>
         <a href="https://oldbaramtools.com/" target="_blank">1) 옛바도구</a>
@@ -100,6 +122,26 @@
 </main>
 
 <script>
+    // 시계 업데이트 기능
+    function updateClock() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        const date = now.getDate();
+        const days = ['일', '월', '화', '수', '목', '금', '토'];
+        const day = days[now.getDay()];
+        
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        
+        document.getElementById('current-date').innerText = `${year}년 ${month}월 ${date}일 (${day})`;
+        document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`;
+    }
+    // 1초마다 시계 갱신
+    setInterval(updateClock, 1000);
+    updateClock(); // 페이지 로드 시 즉시 1회 실행
+
     const level98Guide = `
         <h3>[1~98레벨] 사냥터 루트</h3>
         <h4>■ 영웅의길 (솔플)</h4>

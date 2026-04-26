@@ -113,6 +113,57 @@
         #toggle-widget-btn:hover { background: #555; }
         #collapsible-widgets { display: flex; flex-direction: column; gap: 10px; width: 100%; transform-origin: top; transition: all 0.3s ease; }
         .widgets-hidden { display: none !important; }
+        /* 영상 및 쇼츠 갤러리 그리드 스타일 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .video-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.2s;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .video-title {
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            /* 제목이 길어도 잘리지 않고 여러 줄로 자연스럽게 넘어가도록 설정 */
+            word-break: keep-all;
+            overflow-wrap: break-word;
+            width: 100%;
+        }
+        .video-thumb {
+            width: 100%;
+            aspect-ratio: 16 / 9; /* 기본 가로형 썸네일 비율 */
+            background-color: #000;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+        /* 만약 쇼츠를 세로형 썸네일로 쓰고 싶다면 아래 클래스 사용 */
+        .shorts-grid .video-thumb {
+            aspect-ratio: 9 / 16;
+        }
+
+        /* 모바일에서는 2열로 보이도록 반응형 설정 추가 */
+        @media (max-width: 500px) {
+            .video-grid { grid-template-columns: repeat(2, 1fr); }
+        }
         /* 모바일 대응 */
         @media (max-width: 768px) {
             body { flex-direction: column; }
@@ -786,6 +837,74 @@
                         }
                     ]
                 }
+            },{
+                text: "11. 아카닉 사냥 영상",
+                result: `
+                    <h3>[아카닉 사냥 영상]</h3>
+                    <div class="video-grid">
+                        <a href="https://youtube.com/embed/c_lAyiFTULc" target="_blank" class="video-card">
+                            <div class="video-title">1. 낮흉노 181검성 격도술 210억 (등반포함 226억) </div>
+                            <img src="https://img.youtube.com/vi/c_lAyiFTULc/hqdefault.jpg" alt="썸네일" class="video-thumb">
+                        </a>
+                        <a href="유튜브링크주소2" target="_blank" class="video-card">
+                            <div class="video-title">2. </div>
+                            <img src="images/영상썸네일2.png" alt="썸네일" class="video-thumb">
+                        </a>
+                        <a href="유튜브링크주소3" target="_blank" class="video-card">
+                            <div class="video-title">3. </div>
+                            <img src="images/영상썸네일3.png" alt="썸네일" class="video-thumb">
+                        </a>
+                    </div>
+                `
+            },
+            {
+                text: "12. 아카닉 쇼츠 (Shorts)",
+                result: `
+                    <h3>[아카닉 쇼츠 모음]</h3>
+                    <div class="tip-box">클릭하시면 유튜브 쇼츠가 새 창으로 열립니다.</div>
+                    
+                    <div class="video-grid">
+                        <a href="https://youtube.com/embed/shorts/yh3g4etvj2M" target="_blank" class="video-card">
+                            <div class="video-title"> 높체마 유저의 비극</div>
+                            <img src="https://img.youtube.com/vi/yh3g4etvj2M/hqdefault.jpg" alt="썸네일" class="video-thumb">
+                        </a>
+                        <a href="https://youtube.com/embed/shorts/_zIbREvzuB8" target="_blank" class="video-card">
+                            <div class="video-title"> 옛창섭과 이탈유저 </div>
+                            <img src="https://img.youtube.com/vi/_zIbREvzuB8/hqdefault.jpg" alt="썸네일" class="video-thumb">
+                        </a>
+                        <a href="https://youtube.com/embed/shorts/01NqAAelC8Q" target="_blank" class="video-card">
+                            <div class="video-title"> 도삭산 900층 첫 등반</div>
+                           <img src="https://img.youtube.com/vi/01NqAAelC8Q/hqdefault.jpg" alt="썸네일" class="video-thumb">
+                        </a>
+                         </a>
+                        <a href="https://youtube.com/embed/shorts/sDeJwA4oTqo" target="_blank" class="video-card">
+                            <div class="video-title"> 흉노 첫 사냥 </div>
+                          <img src="https://img.youtube.com/vi/sDeJwA4oTqo/hqdefault.jpg" alt="썸네일" class="video-thumb">
+                        </a>
+                         </a>
+                        <a href="https://youtube.com/embed/shorts/C4Jutzq9eT0" target="_blank" class="video-card">
+                            <div class="video-title">격도술 파티 사냥</div>
+                            <img src="https://img.youtube.com/vi/C4Jutzq9eT0/hqdefault.jpg" alt="썸네일" class="video-thumb">
+                        </a>
+                         </a>
+                        <a href="https://youtube.com/embed/shorts/Mb7XbpwQarY" target="_blank" class="video-card">
+                            <div class="video-title">폐급 도사의 삶</div>
+                            <img src="https://img.youtube.com/vi/Mb7XbpwQarY/hqdefault.jpg" alt="썸네일" class="video-thumb">
+                        </a>
+                        <a href="https://youtube.com/embed/shorts/2CwlprP3sO8" target="_blank" class="video-card">
+                            <div class="video-title">폐급 전사의 삶</div>
+                            <img src="https://img.youtube.com/vi/2CwlprP3sO8/hqdefault.jpg" alt="썸네일" class="video-thumb">
+                        </a>
+                        <a href="https://youtube.com/embed/shorts/A7h4XVDBQzY" target="_blank" class="video-card">
+                            <div class="video-title">폐급 도적의 삶</div>
+                           <img src="https://img.youtube.com/vi/A7h4XVDBQzY/hqdefault.jpg" alt="썸네일" class="video-thumb">
+                        </a>
+                        <a href="https://youtube.com/embed/shorts/BQajijGXKmA" target="_blank" class="video-card">
+                            <div class="video-title">폐급 술사의 삶</div>
+                            <img src="https://img.youtube.com/vi/BQajijGXKmA/hqdefault.jpg" alt="썸네일" class="video-thumb">
+                        </a>
+                    </div>
+                `
             },
             {
                 text: "10. 동귀어진 문파소개",

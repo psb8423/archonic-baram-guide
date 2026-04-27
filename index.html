@@ -112,6 +112,7 @@
         #toggle-widget-btn { font-size: 0.75rem; padding: 6px 12px; border-radius: 12px; background: #343a40; color: white; border: none; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s; align-self: flex-end; font-weight: bold; }
         #toggle-widget-btn:hover { background: #555; }
         #collapsible-widgets { display: flex; flex-direction: column; gap: 10px; width: 100%; transform-origin: top; transition: all 0.3s ease; }
+        
         .widgets-hidden { display: none !important; }
         /* 영상 및 쇼츠 갤러리 그리드 스타일 */
         .video-grid {
@@ -164,6 +165,16 @@
         @media (max-width: 500px) {
             .video-grid { grid-template-columns: repeat(2, 1fr); }
         }
+        /* BGM 플레이어 스타일 */
+        .bgm-player-panel { background: rgba(255, 255, 255, 0.95); padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); text-align: center; border: 1px solid #ddd; width: 100%; box-sizing: border-box; }
+        .bgm-player-panel .link-title { font-weight: bold; color: #333; margin-bottom: 5px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+        .track-info { font-size: 0.75rem; color: #007bff; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: bold; }
+        .bgm-controls { display: flex; justify-content: center; gap: 5px; margin-bottom: 8px; }
+        .bgm-btn { background: #f8f9fa; border: 1px solid #ccc; border-radius: 5px; cursor: pointer; padding: 4px 8px; font-size: 0.9rem; transition: 0.2s; }
+        .bgm-btn:hover { background: #e2e6ea; }
+        .bgm-btn.active { background: #ffeb3b; border-color: #fbc02d; }
+        .volume-control { display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .volume-control input[type="range"] { width: 70%; cursor: pointer; }
         /* 모바일 대응 */
         @media (max-width: 768px) {
             body { flex-direction: column; }
@@ -191,7 +202,25 @@
             <hr id="notice-hr">
             <div class="notice-text" id="daily-notice"></div>
         </div>
-
+<div class="bgm-player-panel">
+            <div class="link-title">🎵 아카닉 BGM</div>
+            <div class="track-info" id="bgm-track-title">재생 버튼을 눌러주세요</div>
+            
+            <audio id="bgm-audio"></audio>
+            
+            <div class="bgm-controls">
+                <button class="bgm-btn" onclick="prevTrack()" title="이전곡">⏮️</button>
+                <button class="bgm-btn" id="bgm-play-btn" onclick="togglePlayPause()" title="재생/일시정지">▶️</button>
+                <button class="bgm-btn" onclick="stopTrack()" title="정지">⏹️</button>
+                <button class="bgm-btn" onclick="nextTrack()" title="다음곡">⏭️</button>
+                <button class="bgm-btn" id="bgm-repeat-btn" onclick="toggleRepeat()" title="한곡반복 끄기/켜기">🔁</button>
+            </div>
+            
+            <div class="volume-control">
+                <span style="font-size: 0.8rem;">🔈</span>
+                <input type="range" id="bgm-volume" min="0" max="100" value="20" oninput="changeVolume()">
+            </div>
+        </div>
       <div class="helpful-links">
             <div class="link-title">도움이 되는 사이트</div>
             <a href="https://oldbaramtools.com/" target="_blank">1) 옛바도구</a>
@@ -1159,6 +1188,100 @@
             toggleBtn.innerText = '▲ 위젯 펴기';
         }
     }
+    // ===== BGM 플레이어 로직 =====
+    const bgmAudio = document.getElementById('bgm-audio');
+    const playBtn = document.getElementById('bgm-play-btn');
+    const repeatBtn = document.getElementById('bgm-repeat-btn');
+    const trackTitleDisplay = document.getElementById('bgm-track-title');
+    const volumeSlider = document.getElementById('bgm-volume');
+
+    // 🎵 재생목록 설정 (여기에 파일명과 제목을 적어주세요!)
+    const playlist = [
+        { title: "1. Radiohead-Creep", src: "Radiohead Creep.mp3" },
+        { title: "2. 바람의나라-진시황릉, 지옥 BGM", src: "wind hell, jin emperor.mp3" },
+        { title: "3. maneskin - beggin", src: "maneskin - beggin.mp3" }
+        { title: "4. ladygaga - alejandro", src: "ladygaga - alejandro.mp3" }
+     
+    ];
+
+    let currentTrackIndex = 0;
+    let isRepeatOne = false;
+
+    // 초기 볼륨 설정 (0~100 중 20)
+    bgmAudio.volume = 0.2; 
+
+    // 트랙 불러오기
+    function loadTrack(index) {
+        bgmAudio.src = playlist[index].src;
+        trackTitleDisplay.innerText = playlist[index].title;
+        bgmAudio.load();
+    }
+
+    // 재생/일시정지
+    function togglePlayPause() {
+        if (bgmAudio.paused) {
+            if (!bgmAudio.src || bgmAudio.src.endsWith("null") || bgmAudio.src === window.location.href) {
+                loadTrack(currentTrackIndex); // 처음 재생시 로드
+            }
+            bgmAudio.play();
+            playBtn.innerText = "⏸️";
+        } else {
+            bgmAudio.pause();
+            playBtn.innerText = "▶️";
+        }
+    }
+
+    // 정지
+    function stopTrack() {
+        bgmAudio.pause();
+        bgmAudio.currentTime = 0; // 처음으로 되감기
+        playBtn.innerText = "▶️";
+        trackTitleDisplay.innerText = "■ 정지됨: " + playlist[currentTrackIndex].title;
+    }
+
+    // 이전곡
+    function prevTrack() {
+        currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+        loadTrack(currentTrackIndex);
+        bgmAudio.play();
+        playBtn.innerText = "⏸️";
+    }
+
+    // 다음곡
+    function nextTrack() {
+        currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+        loadTrack(currentTrackIndex);
+        bgmAudio.play();
+        playBtn.innerText = "⏸️";
+    }
+
+    // 볼륨 조절 (0~100 슬라이더 값을 0.0~1.0으로 변환)
+    function changeVolume() {
+        bgmAudio.volume = volumeSlider.value / 100;
+    }
+
+    // 한곡 반복 토글
+    function toggleRepeat() {
+        isRepeatOne = !isRepeatOne;
+        bgmAudio.loop = isRepeatOne; // audio 태그의 loop 속성 제어
+        if (isRepeatOne) {
+            repeatBtn.classList.add("active");
+            repeatBtn.title = "한곡반복 켜짐";
+        } else {
+            repeatBtn.classList.remove("active");
+            repeatBtn.title = "한곡반복 꺼짐 (전체재생)";
+        }
+    }
+
+    // 곡이 끝났을 때 자동 다음곡 재생 (반복이 꺼져있을 때만)
+    bgmAudio.addEventListener('ended', () => {
+        if (!isRepeatOne) {
+            nextTrack();
+        }
+    });
+
+    // 시작 시 첫 곡 제목 띄워놓기 (재생은 안 함)
+    trackTitleDisplay.innerText = "대기중: " + playlist[0].title;
     </script>
 </body>
 </html>

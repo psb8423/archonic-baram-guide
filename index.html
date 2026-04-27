@@ -203,10 +203,10 @@
             <div class="notice-text" id="daily-notice"></div>
         </div>
 <div class="bgm-player-panel">
-            <div class="link-title">🎵 아카닉 BGM</div>
-            <div class="track-info" id="bgm-track-title">재생 버튼을 눌러주세요</div>
+            <div class="link-title">🎵 아카닉 BGM (YouTube)</div>
+            <div class="track-info" id="bgm-track-title">로딩중...</div>
             
-            <audio id="bgm-audio"></audio>
+            <div id="youtube-player" style="position: absolute; width: 0; height: 0; left: -9999px;"></div>
             
             <div class="bgm-controls">
                 <button class="bgm-btn" onclick="prevTrack()" title="이전곡">⏮️</button>
@@ -215,6 +215,12 @@
                 <button class="bgm-btn" onclick="nextTrack()" title="다음곡">⏭️</button>
                 <button class="bgm-btn" id="bgm-repeat-btn" onclick="toggleRepeat()" title="한곡반복 끄기/켜기">🔁</button>
             </div>
+            
+            <div class="volume-control">
+                <span style="font-size: 0.8rem;">🔈</span>
+                <input type="range" id="bgm-volume" min="0" max="100" value="20" oninput="changeVolume()">
+            </div>
+        </div>
             
             <div class="volume-control">
                 <span style="font-size: 0.8rem;">🔈</span>
@@ -1188,82 +1194,123 @@
             toggleBtn.innerText = '▲ 위젯 펴기';
         }
     }
-    // ===== BGM 플레이어 로직 =====
-    const bgmAudio = document.getElementById('bgm-audio');
+   // ===== 유튜브 API 기반 BGM 플레이어 로직 =====
     const playBtn = document.getElementById('bgm-play-btn');
     const repeatBtn = document.getElementById('bgm-repeat-btn');
     const trackTitleDisplay = document.getElementById('bgm-track-title');
     const volumeSlider = document.getElementById('bgm-volume');
 
-    // 🎵 재생목록 설정 (여기에 파일명과 제목을 적어주세요!)
+    // 🎵 재생목록 (유튜브 영상 ID 입력)
     const playlist = [
-        { title: "1. Radiohead-Creep", src: "Radiohead Creep.mp3" },
-        { title: "2. 바람의나라-진시황릉, 지옥 BGM", src: "wind hell, jin emperor.mp3" },
-        { title: "3. maneskin - beggin", src: "maneskin - beggin.mp3" }
-        { title: "4. ladygaga - alejandro", src: "ladygaga - alejandro.mp3" }
-     
+        { title: "1. Creep", videoId: "SLbSsv_2u4A" },
+        { title: "2. Beggin", videoId: "XktbBQMXboE" },
+        { title: "3. arejandro", videoId: "ip3YktPi-38" }
     ];
 
     let currentTrackIndex = 0;
     let isRepeatOne = false;
+    let ytPlayer;
+    let isPlaying = false;
 
-    // 초기 볼륨 설정 (0~100 중 20)
-    bgmAudio.volume = 0.2; 
+    // 1. 유튜브 API 스크립트 불러오기
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    // 트랙 불러오기
-    function loadTrack(index) {
-        bgmAudio.src = playlist[index].src;
-        trackTitleDisplay.innerText = playlist[index].title;
-        bgmAudio.load();
+    // 2. API가 준비되면 숨겨진 플레이어 생성
+    function onYouTubeIframeAPIReady() {
+        ytPlayer = new YT.Player('youtube-player', {
+            height: '0',
+            width: '0',
+            videoId: playlist[currentTrackIndex].videoId,
+            playerVars: {
+                'autoplay': 0, 'controls': 0, 'disablekb': 1, 'fs': 0, 'modestbranding': 1, 'playsinline': 1
+            },
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange,
+                'onError': onPlayerError
+            }
+        });
     }
 
-    // 재생/일시정지
-    function togglePlayPause() {
-        if (bgmAudio.paused) {
-            if (!bgmAudio.src || bgmAudio.src.endsWith("null") || bgmAudio.src === window.location.href) {
-                loadTrack(currentTrackIndex); // 처음 재생시 로드
+    // 3. 플레이어 로딩 완료 시 초기 설정
+    function onPlayerReady(event) {
+        ytPlayer.setVolume(volumeSlider.value);
+        trackTitleDisplay.innerText = "대기중: " + playlist[currentTrackIndex].title;
+    }
+
+    // 4. 재생 상태 변화 감지 (자동 다음곡, 아이콘 변경 등)
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.ENDED) { // 재생 끝남
+            if (isRepeatOne) {
+                ytPlayer.seekTo(0);
+                ytPlayer.playVideo();
+            } else {
+                nextTrack();
             }
-            bgmAudio.play();
+        } else if (event.data === YT.PlayerState.PLAYING) { // 재생 중
+            isPlaying = true;
             playBtn.innerText = "⏸️";
-        } else {
-            bgmAudio.pause();
+            trackTitleDisplay.innerText = "🎵 " + playlist[currentTrackIndex].title;
+        } else if (event.data === YT.PlayerState.PAUSED) { // 일시정지
+            isPlaying = false;
             playBtn.innerText = "▶️";
+            trackTitleDisplay.innerText = "⏸️ " + playlist[currentTrackIndex].title;
         }
     }
 
-    // 정지
+    // 5. 퍼가기 금지 영상 등 에러 발생 시 처리
+    function onPlayerError(event) {
+        console.error("유튜브 재생 에러:", event.data);
+        trackTitleDisplay.innerText = "⚠️ 재생 불가 영상 (2초 뒤 건너뜀)";
+        setTimeout(nextTrack, 2000);
+    }
+
+    // 6. 컨트롤 버튼 함수들
+    function loadTrack(index) {
+        if(ytPlayer && ytPlayer.loadVideoById) {
+            ytPlayer.loadVideoById(playlist[index].videoId);
+        }
+    }
+
+    function togglePlayPause() {
+        if (!ytPlayer || !ytPlayer.playVideo) return;
+        if (isPlaying) {
+            ytPlayer.pauseVideo();
+        } else {
+            ytPlayer.playVideo();
+        }
+    }
+
     function stopTrack() {
-        bgmAudio.pause();
-        bgmAudio.currentTime = 0; // 처음으로 되감기
+        if (!ytPlayer || !ytPlayer.stopVideo) return;
+        ytPlayer.pauseVideo();
+        ytPlayer.seekTo(0);
+        isPlaying = false;
         playBtn.innerText = "▶️";
         trackTitleDisplay.innerText = "■ 정지됨: " + playlist[currentTrackIndex].title;
     }
 
-    // 이전곡
     function prevTrack() {
         currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
         loadTrack(currentTrackIndex);
-        bgmAudio.play();
-        playBtn.innerText = "⏸️";
     }
 
-    // 다음곡
     function nextTrack() {
         currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
         loadTrack(currentTrackIndex);
-        bgmAudio.play();
-        playBtn.innerText = "⏸️";
     }
 
-    // 볼륨 조절 (0~100 슬라이더 값을 0.0~1.0으로 변환)
     function changeVolume() {
-        bgmAudio.volume = volumeSlider.value / 100;
+        if (ytPlayer && ytPlayer.setVolume) {
+            ytPlayer.setVolume(volumeSlider.value);
+        }
     }
 
-    // 한곡 반복 토글
     function toggleRepeat() {
         isRepeatOne = !isRepeatOne;
-        bgmAudio.loop = isRepeatOne; // audio 태그의 loop 속성 제어
         if (isRepeatOne) {
             repeatBtn.classList.add("active");
             repeatBtn.title = "한곡반복 켜짐";
@@ -1272,16 +1319,6 @@
             repeatBtn.title = "한곡반복 꺼짐 (전체재생)";
         }
     }
-
-    // 곡이 끝났을 때 자동 다음곡 재생 (반복이 꺼져있을 때만)
-    bgmAudio.addEventListener('ended', () => {
-        if (!isRepeatOne) {
-            nextTrack();
-        }
-    });
-
-    // 시작 시 첫 곡 제목 띄워놓기 (재생은 안 함)
-    trackTitleDisplay.innerText = "대기중: " + playlist[0].title;
     </script>
 </body>
 </html>

@@ -194,18 +194,35 @@
             .menu-grid { grid-template-columns: repeat(2, 1fr); }
         }
        
-        /* 모바일 대응 */
-        @media (max-width: 768px) {
-            body { flex-direction: column; }
-            #sidebar { width: 100%; height: auto; position: relative; padding: 15px; box-sizing: border-box; }
-            #main-container { padding: 20px 10px; }
-            .watermark-container { top: auto; bottom: 15px; right: 15px; align-items: flex-end; width: 175px; }
-        }
+  /* 모바일 대응 */
+@media (max-width: 768px) {
+    body { flex-direction: column; }
+    #sidebar { width: 100%; height: auto; position: relative; padding: 15px; box-sizing: border-box; display: none; }
+    #sidebar.sidebar-open { display: flex; }
+    #main-container { padding: 20px 10px; }
+    .watermark-container { top: auto; bottom: 15px; right: 15px; align-items: flex-end; width: 175px; }
+    #toc-toggle-btn { display: block; }
+}
+
+#toc-toggle-btn {
+    display: none;
+    background: #1e3a5f;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+#toc-toggle-btn:hover { background: #16304f; }
     </style>
 </head>
 <body>
 
 <div class="watermark-container">
+    <button id="toc-toggle-btn" onclick="toggleSidebar()">☰ 목차 펴기</button>
     <a href="https://www.youtube.com/@archonic00" target="_blank" class="watermark" title="아카닉 유튜브로 이동">
         <img src="profil.png" alt="아카닉 유튜브">
         <span class="badge">아카닉 유튜브</span>
@@ -1184,21 +1201,33 @@
   
 
 // ===== 위젯 접기/펴기 기능 =====
-    let isWidgetOpen = true;
-    function toggleWidgets() {
-        const widgetGroup = document.getElementById('collapsible-widgets');
-        const toggleBtn = document.getElementById('toggle-widget-btn');
-        
-        isWidgetOpen = !isWidgetOpen;
-        if (isWidgetOpen) {
-            widgetGroup.classList.remove('widgets-hidden');
-            toggleBtn.innerText = '▼ 위젯 접기';
-        } else {
-            widgetGroup.classList.add('widgets-hidden');
-            toggleBtn.innerText = '▲ 위젯 펴기';
-        }
+ let isWidgetOpen = true;
+
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const btn = document.getElementById('toc-toggle-btn');
+    sidebar.classList.toggle('sidebar-open');
+    if (sidebar.classList.contains('sidebar-open')) {
+        btn.innerText = '▲ 목차 접기';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        btn.innerText = '☰ 목차 접기';
     }
- 
+}
+
+function toggleWidgets() {
+    const widgetGroup = document.getElementById('collapsible-widgets');
+    const toggleBtn = document.getElementById('toggle-widget-btn');
+    
+    isWidgetOpen = !isWidgetOpen;
+    if (isWidgetOpen) {
+        widgetGroup.classList.remove('widgets-hidden');
+        toggleBtn.innerText = '▼ 위젯 접기';
+    } else {
+        widgetGroup.classList.add('widgets-hidden');
+        toggleBtn.innerText = '▲ 위젯 펴기';
+    }
+}
     </script>
 </body>
 </html>

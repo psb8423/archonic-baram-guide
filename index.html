@@ -198,6 +198,10 @@
             height: 46px;
             object-fit: contain;
         }
+        /* 검정색 아이콘을 흰색으로 강제 변환 (파일 자체가 흰색이 아닐 때 사용) */
+        .menu-card img.icon-white {
+            filter: brightness(0) invert(1);
+        }
         .menu-card .menu-label {
             font-size: 0.92rem;
             font-weight: bold;
@@ -497,6 +501,7 @@
             {
                 text: "3. 아이템",
                 icon: "menu3.png",
+                iconClass: "icon-white",
                 next: {
                     title: "아이템 세팅 종류를 선택하세요",
                     options: [
@@ -573,6 +578,7 @@
             {
                 text: "4. 파밍 사냥터",
                 icon: "menu4.png",
+                iconClass: "icon-white",
                 result: `
                     <h3>[레벨별 추천 파밍 루트]</h3>
                     <p>내용에 맞는 사진 두 장을 아래에 배치했습니다.</p>
@@ -589,6 +595,7 @@
             {
                 text: "5. 승급가이드",
                 icon: "menu5.png",
+                iconClass: "icon-white",
                 next: {
                     title: "승급 단계를 선택하세요",
                     options: [
@@ -732,6 +739,7 @@
             {
                 text: "7. 용궁가이드",
                 icon: "menu7.png",
+                iconClass: "icon-white",
                 next: {
                     title: "용궁 가이드 항목을 선택하세요",
                     options: [
@@ -823,6 +831,7 @@
             {
                 text: "8. 중국퀘스트 가이드",
                 icon: "menu8.png",
+                iconClass: "icon-white",
                 next: {
                     title: "중국 퀘스트 지역을 선택하세요",
                     options: [
@@ -887,6 +896,7 @@
             {
                 text: "9. 환상의섬 가이드",
                 icon: "menu9.png",
+                iconClass: "icon-white",
                 next: {
                     title: "환상의섬 항목을 선택하세요",
                     options: [
@@ -894,7 +904,7 @@
                             text: "1) 도시락 레시피", 
                             result: `
                                 <h3>[도시락 제작 레시피]</h3>
-                                <p>레시피 정보.</p>
+                                <p>레시피 정보를 담은 사진 두 장입니다.</p>
                                 <a href='bento 0.png' target='_blank' title='클릭해서 확대 보기'><img src='bento 0.png' class='zoom-img'></a>
                                 <a href='bento 1.png' target='_blank' title='클릭해서 확대 보기'><img src='bento 1.png' class='zoom-img'></a>
                                 <div class='tip-box'><strong>💡 팁:</strong> 재료 수집이 까다로우니 한 번에 많이 모아서 제작하는 것을 추천합니다.</div>
@@ -931,7 +941,8 @@
                 }
             },{
                 text: "10. 아카닉 사냥 영상",
-                icon: "menu10.png",
+                 icon: "menu10.png",
+                 iconClass: "icon-white",
                 result: `
                     <h3>[아카닉 사냥 영상]</h3>
                     <div class="video-grid">
@@ -952,7 +963,8 @@
             },
             {
                 text: "11. 아카닉 쇼츠 (Shorts)",
-                icon: "menu11.png",
+                  icon: "menu11.png",
+                 iconClass: "icon-white",
                 result: `
                     <h3>[아카닉 쇼츠 모음]</h3>
                     <div class="tip-box">클릭하시면 유튜브 쇼츠가 새 창으로 열립니다.</div>
@@ -1019,7 +1031,7 @@
             },
             {
                 text: "★동귀어진 문파소개★",
-                icon: "menu12.png",
+                  icon: "menu12.png",
                 result: `
                     <h3>[★동귀어진★ 문파소개]</h3>
                     <h4>■ 사냥 / 친목 문파 ★동귀어진★ 에서 신규 문원을 모십니다.</h4>
@@ -1132,7 +1144,7 @@
                     const card = document.createElement('div');
                     card.className = 'menu-card';
                     card.innerHTML = `
-                        <img src="${opt.icon}" alt="${opt.text}">
+                        <img src="${opt.icon}" alt="${opt.text}" class="${opt.iconClass || ''}">
                         <span class="menu-label">${opt.text}</span>
                     `;
                     card.onclick = () => {
